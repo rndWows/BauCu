@@ -29,11 +29,17 @@
     <main>
         <div class="control-panel">
             <div class="search-sort-container">
-                <input type="text" id="searchInput" placeholder="Tìm kiếm theo tên ứng viên">
-                <select id="sortSelect">
-                    <option value="votes">Sắp xếp theo số phiếu (cao đến thấp)</option>
-                    <option value="name">Sắp xếp theo tên</option>
-                </select>
+                <div class="search-container">
+                    <input type="text" id="searchInput" placeholder="Tìm kiếm theo tên ứng viên">
+                    <i class="fas fa-search search-icon"></i>
+                  </div>
+                <div class="sort-container" hidden>
+                    <select id="sortSelect">
+                      <option value="votes">Sắp xếp theo số phiếu (cao đến thấp)</option>
+                      <option value="name">Sắp xếp theo tên</option>
+                    </select>
+                    <i class="fas fa-sort sort-icon"></i>
+                  </div>
             </div>
             <div class="pagination-container">
                 <button id="prevPage"><i class="fas fa-chevron-left"></i> </button>
