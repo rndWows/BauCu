@@ -1,119 +1,183 @@
-body {
-
-    margin: 0;
-    padding: 20px;
-    background-color: #e8f5e9;
-    color: #333;
+:root {
+    --primary-color: #4CAF50;
+    --primary-dark: #45a049;
+    --text-color: #333;
+    --bg-color: #f5f5f5;
+    --card-bg: #ffffff;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --border-radius: 8px;
 }
 
-h1 {
-    text-align: center;
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.control-panel {
+    background-color: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    padding: 20px;
     margin-bottom: 30px;
-    font-size: 2.5em;
-    color: #2e7d32;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.search-sort-container {
+    display: flex;
+    gap: 10px;
+    flex-grow: 1;
+}
+
+#searchInput,
+#sortSelect {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius);
+    font-size: 16px;
+}
+
+#searchInput {
+    flex-grow: 1;
+}
+
+#sortSelect {
+    background-color: white;
+    cursor: pointer;
+}
+
+.pagination-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+button:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
 }
 
 #refreshButton {
-    display: block;
-    margin: 0 auto 20px;
-    background-color: #388e3c;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    padding: 12px 20px;
-    font-size: 18px;
-    transition: background-color 0.3s ease;
-}
-
-
-
-#refreshButton:hover {
-    background-color: #2e7d32;
+    padding: 10px;
+    border-radius: 50%;
 }
 
 .card-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
+    align-items: stretch; /* Đảm bảo tất cả card có cùng chiều cao */
 }
 
 .card {
-    background-color: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    padding: 20px;
     display: flex;
     flex-direction: column;
-    transition: transform 0.3s ease;
+    height: 100%; /* Đảm bảo card chiếm toàn bộ chiều cao của container */
+    background-color: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .card:hover {
-    transform: translateY(-10px);
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 .card img {
     width: 100%;
-    height: auto;
-    border-radius: 8px;
-    object-fit: cover;
-    aspect-ratio: 1 / 1;
+    height: 200px;
+    object-fit: contain;
+    background-color: #f0f0f0; /* Màu nền nhẹ để phân biệt với card */
+}
+
+.card-content {
+    padding: 10px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .card h2 {
-    margin: 15px 0 10px;
-    color: #1b5e20;
+    margin: 0 0 15px;
+    color: var(--primary-color);
+    font-size: 1.5em;
 }
 
 .card p {
-    margin: 5px 0;
+    margin: 8px 0;
+    font-size: 0.9em;
     color: #666;
 }
 
-.card .vote-stats {
-    margin-top: 15px;
-    font-weight: bold;
-    color: #388e3c;
-}
-
-button {
+.card-buttons {
+    display: flex;
+    justify-content: space-between;
     margin-top: auto;
-    padding: 12px;
-    font-size: 16px;
-    background-color: #4caf50;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+    margin-top: auto; /* Đẩy nút xuống dưới cùng */
 }
 
-button:hover {
-    background-color: #45a049;
+.card-buttons button {
+    flex: 1;
+    margin: 0 5px;
+}
+
+.vote-btn {
+    background-color: #4CAF50;
+}
+
+.view-info-btn {
+    background-color: #2196F3;
 }
 
 .modal {
     display: none;
     position: fixed;
-    z-index: 1;
+    z-index: 1000;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.4);
 }
 
 .modal-content {
-    background-color: #fefefe;
-
-    
-    border-radius: 12px;
-    border: none;
-    width: 80%;
+    background-color: var(--card-bg);
+    margin: 15% auto;
+    padding: 20px;
+    border-radius: var(--border-radius);
+    width: 90%;
     max-width: 500px;
+    box-shadow: var(--shadow);
 }
 
 .close {
@@ -129,189 +193,167 @@ button:hover {
     color: #000;
 }
 
-.pagination {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-}
-
-.pagination button {
-    margin: 0 5px;
-    padding: 5px 10px;
-}
-
-#searchInput {
-    width: 100%;
-    max-width: 300px;
-    padding: 10px;
-    margin: 20px auto;
-    display: block;
-}
-
-#sortSelect {
-    display: block;
-    margin: 20px auto;
-}
-
-@media (max-width: 600px) {
-    body {
-        padding: 10px;
-    }
-
-    .card-container {
-        grid-template-columns: 1fr;
-    }
-
-    .modal-content {
-        width: 95%;
-        margin: 10% auto;
-    }
-
-
-
-
-}
-
-input[type="text"] {
+#voterIdInput {
     width: 100%;
     padding: 10px;
     margin: 10px 0;
     border: 1px solid #ddd;
-    border-radius: 4px;
+    border-radius: var(--border-radius);
     box-sizing: border-box;
 }
 
 #submitVoteButton {
-    background-color: #388e3c;
-    color: white;
-    border: none;
-    padding: 12px 20px;
-    border-radius: 8px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
 }
 
-#submitVoteButton:hover {
-    background-color: #2e7d32;
-}
-
-/* Thêm style cho modal */
 .modal-mask {
     position: fixed;
     inset: 0;
-    background-color: rgba(0, 0, 0, 0.2);
-    text-align: center;
-    user-select: none;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
 }
 
-.modal-mask::before {
-    display: inline-block;
-    vertical-align: middle;
-    content: " ";
-    height: 100%;
-    width: 0;
-    margin-left: -0.25em;
-}
-
-.modal-mask .modal-dialog {
-    position: relative;
-    text-align: left;
-    overflow: hidden;
-    width: 600px;
-    max-width: 600px;
-    background-color: white;
+.modal-dialog {
+    background-color: var(--card-bg);
     padding: 20px;
-    border-radius: 10px;
-    display: inline-flex;
-    flex-direction: column;
-    vertical-align: middle;
-    max-height: calc(100vh - 200px);
-    user-select: text;
+    border-radius: var(--border-radius);
+    max-width: 600px;
+    width: 90%;
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+    box-shadow: var(--shadow);
 }
 
-.modal-mask .modal-dialog .modal-close {
-    position: absolute;
-    right: 20px;
+.modal-close {
+    float: right;
     cursor: pointer;
 }
 
-.modal-mask .modal-dialog .modal-close:hover svg path {
-    fill: #df0606;
+.modal-close svg {
+    width: 24px;
+    height: 24px;
+    stroke: #a3a3a3;
+    transition: stroke 0.3s ease;
 }
 
-.modal-mask .modal-dialog .modal-close svg {
-    width: 16px;
-    height: 16px;
+.modal-close:hover svg {
+    stroke: #df0606;
 }
 
-.modal-mask .modal-dialog .modal-close svg path {
-    transition: all 0.3s linear;
-    fill: #a3a3a3;
-}
-
-.modal-mask .modal-dialog .modal-title {
-    text-transform: capitalize;
-    font-size: 16px;
+.modal-title {
+    font-size: 24px;
     font-weight: bold;
-    color: #3b3b3b;
-    width: calc(100% - 24px);
-    margin-bottom: 16px;
+    color: var(--primary-color);
+    margin-bottom: 20px;
 }
 
-.modal-mask .modal-dialog .modal-content {
-    height: 100%;
-    overflow-y: auto;
-}
+@media (max-width: 768px) {
+    .control-panel {
+        flex-direction: column;
+        align-items: stretch;
+    }
 
-.modal-mask .fui-modal-center-fade-zoom.modal-dialog {
-    transition: transform 0.4s ease, opacity 0.4s linear;
-    transform: scale(0);
-    opacity: 0;
-}
-
-.modal-mask .fui-modal-center-fade-zoom.modal-dialog.is-open {
-    transform: scale(1);
-    opacity: 1;
-}
-
-@media only screen and (max-width: 39.9375em) {
-    .modal-mask .modal-dialog {
+    .search-sort-container,
+    .pagination-container {
         width: 100%;
-        max-width: calc(100vw - 32px);
+    }
+
+    .search-sort-container {
+        flex-direction: column;
+    }
+
+    .pagination-container {
+        justify-content: space-between;
     }
 }
 
-.view-info-btn {
-    margin-top: 10px;
-    background-color: #4CAF50;
-    color: white;
+/* Thêm CSS cho hiệu ứng loading */
+#loadingOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.card-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.card-buttons button {
+    flex: 1;
+    padding: 12px 16px;
     border: none;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
+    border-radius: 8px;
+    font-family: 'Arial', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
     cursor: pointer;
-    border-radius: 5px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card-buttons button i {
+    margin-right: 8px;
+    font-size: 16px;
+}
+
+.vote-btn {
+    background: linear-gradient(to bottom, #4CAF50, #45a049);
+    color: white;
+}
+
+.vote-btn:hover {
+    background: linear-gradient(to bottom, #45a049, #4CAF50);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+}
+
+.view-info-btn {
+    background: linear-gradient(to bottom, #2196F3, #1e88e5);
+    color: white;
 }
 
 .view-info-btn:hover {
-    background-color: #45a049;
-}
-
-
-
-.custom-arrow {
-    position: absolute;
-    top: 50%;
-    right: 15px;
-    transform: translateY(-50%);
-    width: 0;
-    height: 0;
-    border-left: 6px solid transparent;
-    border-right: 6px solid transparent;
-    border-top: 8px solid #4caf50;
-    pointer-events: none;
+    background: linear-gradient(to bottom, #1e88e5, #2196F3);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
 }
 
