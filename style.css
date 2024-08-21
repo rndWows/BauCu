@@ -1,6 +1,5 @@
-
 body {
-   
+
     margin: 0;
     padding: 20px;
     background-color: #e8f5e9;
@@ -24,25 +23,6 @@ h1 {
     padding: 12px 20px;
     font-size: 18px;
     transition: background-color 0.3s ease;
-}
-
-.control-panel {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    max-width: 1200px;
-}
-
-.control-panel > * {
-    margin: 0;
-}
-
-#searchInput, #sortSelect {
-    flex-grow: 1;
-}
-
-#pageInfo {
-    white-space: nowrap;
 }
 
 
@@ -324,9 +304,9 @@ input[type="text"] {
     position: relative;
     display: inline-block;
     font-family: Arial, sans-serif;
-  }
-  
-  .custom-select select {
+}
+
+.custom-select select {
     display: inline-block;
     padding: 10px 40px 10px 15px;
     font-size: 16px;
@@ -338,16 +318,16 @@ input[type="text"] {
     -moz-appearance: none;
     cursor: pointer;
     transition: all 0.3s ease;
-  }
-  
-  .custom-select select:hover,
-  .custom-select select:focus {
+}
+
+.custom-select select:hover,
+.custom-select select:focus {
     border-color: #45a049;
     box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
     outline: none;
-  }
-  
-  .custom-arrow {
+}
+
+.custom-arrow {
     position: absolute;
     top: 50%;
     right: 15px;
@@ -358,10 +338,9 @@ input[type="text"] {
     border-right: 6px solid transparent;
     border-top: 8px solid #4caf50;
     pointer-events: none;
-  }
-  
-  .custom-select select:hover + .custom-arrow,
-  .custom-select select:focus + .custom-arrow {
-    border-top-color: #45a049;
-  }
+}
 
+.custom-select select:hover+.custom-arrow,
+.custom-select select:focus+.custom-arrow {
+    border-top-color: #45a049;
+}
