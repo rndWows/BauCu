@@ -300,32 +300,7 @@ input[type="text"] {
     background-color: #45a049;
 }
 
-.custom-select {
-    position: relative;
-    display: inline-block;
-    font-family: Arial, sans-serif;
-}
 
-.custom-select select {
-    display: inline-block;
-    padding: 10px 40px 10px 15px;
-    font-size: 16px;
-    border-radius: 5px;
-    background-color: white;
-    color: #333;
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.custom-select select:hover,
-.custom-select select:focus {
-    border-color: #45a049;
-    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
-    outline: none;
-}
 
 .custom-arrow {
     position: absolute;
@@ -340,7 +315,3 @@ input[type="text"] {
     pointer-events: none;
 }
 
-.custom-select select:hover+.custom-arrow,
-.custom-select select:focus+.custom-arrow {
-    border-top-color: #45a049;
-}
