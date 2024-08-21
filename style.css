@@ -1,0 +1,367 @@
+
+body {
+   
+    margin: 0;
+    padding: 20px;
+    background-color: #e8f5e9;
+    color: #333;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2.5em;
+    color: #2e7d32;
+}
+
+#refreshButton {
+    display: block;
+    margin: 0 auto 20px;
+    background-color: #388e3c;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 12px 20px;
+    font-size: 18px;
+    transition: background-color 0.3s ease;
+}
+
+.control-panel {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: 1200px;
+}
+
+.control-panel > * {
+    margin: 0;
+}
+
+#searchInput, #sortSelect {
+    flex-grow: 1;
+}
+
+#pageInfo {
+    white-space: nowrap;
+}
+
+
+
+#refreshButton:hover {
+    background-color: #2e7d32;
+}
+
+.card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+}
+
+.card img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    object-fit: cover;
+    aspect-ratio: 1 / 1;
+}
+
+.card h2 {
+    margin: 15px 0 10px;
+    color: #1b5e20;
+}
+
+.card p {
+    margin: 5px 0;
+    color: #666;
+}
+
+.card .vote-stats {
+    margin-top: 15px;
+    font-weight: bold;
+    color: #388e3c;
+}
+
+button {
+    margin-top: auto;
+    padding: 12px;
+    font-size: 16px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border-radius: 12px;
+    border: none;
+    width: 80%;
+    max-width: 500px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close:hover {
+    color: #000;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination button {
+    margin: 0 5px;
+    padding: 5px 10px;
+}
+
+#searchInput {
+    width: 100%;
+    max-width: 300px;
+    padding: 10px;
+    margin: 20px auto;
+    display: block;
+}
+
+#sortSelect {
+    display: block;
+    margin: 20px auto;
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+
+    .card-container {
+        grid-template-columns: 1fr;
+    }
+
+    .modal-content {
+        width: 95%;
+        margin: 10% auto;
+    }
+
+
+
+
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+#submitVoteButton {
+    background-color: #388e3c;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#submitVoteButton:hover {
+    background-color: #2e7d32;
+}
+
+/* Thêm style cho modal */
+.modal-mask {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.2);
+    text-align: center;
+    user-select: none;
+}
+
+.modal-mask::before {
+    display: inline-block;
+    vertical-align: middle;
+    content: " ";
+    height: 100%;
+    width: 0;
+    margin-left: -0.25em;
+}
+
+.modal-mask .modal-dialog {
+    position: relative;
+    text-align: left;
+    overflow: hidden;
+    width: 600px;
+    max-width: 600px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    display: inline-flex;
+    flex-direction: column;
+    vertical-align: middle;
+    max-height: calc(100vh - 200px);
+    user-select: text;
+}
+
+.modal-mask .modal-dialog .modal-close {
+    position: absolute;
+    right: 20px;
+    cursor: pointer;
+}
+
+.modal-mask .modal-dialog .modal-close:hover svg path {
+    fill: #df0606;
+}
+
+.modal-mask .modal-dialog .modal-close svg {
+    width: 16px;
+    height: 16px;
+}
+
+.modal-mask .modal-dialog .modal-close svg path {
+    transition: all 0.3s linear;
+    fill: #a3a3a3;
+}
+
+.modal-mask .modal-dialog .modal-title {
+    text-transform: capitalize;
+    font-size: 16px;
+    font-weight: bold;
+    color: #3b3b3b;
+    width: calc(100% - 24px);
+    margin-bottom: 16px;
+}
+
+.modal-mask .modal-dialog .modal-content {
+    height: 100%;
+    overflow-y: auto;
+}
+
+.modal-mask .fui-modal-center-fade-zoom.modal-dialog {
+    transition: transform 0.4s ease, opacity 0.4s linear;
+    transform: scale(0);
+    opacity: 0;
+}
+
+.modal-mask .fui-modal-center-fade-zoom.modal-dialog.is-open {
+    transform: scale(1);
+    opacity: 1;
+}
+
+@media only screen and (max-width: 39.9375em) {
+    .modal-mask .modal-dialog {
+        width: 100%;
+        max-width: calc(100vw - 32px);
+    }
+}
+
+.view-info-btn {
+    margin-top: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.view-info-btn:hover {
+    background-color: #45a049;
+}
+
+.custom-select {
+    position: relative;
+    display: inline-block;
+    font-family: Arial, sans-serif;
+  }
+  
+  .custom-select select {
+    display: inline-block;
+    padding: 10px 40px 10px 15px;
+    font-size: 16px;
+    border-radius: 5px;
+    background-color: white;
+    color: #333;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .custom-select select:hover,
+  .custom-select select:focus {
+    border-color: #45a049;
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+    outline: none;
+  }
+  
+  .custom-arrow {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 8px solid #4caf50;
+    pointer-events: none;
+  }
+  
+  .custom-select select:hover + .custom-arrow,
+  .custom-select select:focus + .custom-arrow {
+    border-top-color: #45a049;
+  }
+
