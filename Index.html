@@ -187,9 +187,6 @@ function displayCandidates(candidates) {
 
   candidates.forEach(candidate => {
     const card = $('<div>').addClass('card');
-    const votes = candidate.votes || 0;
-    const percentage = totalVotes > 0 ? (votes / totalVotes * 100).toFixed(2) : 0;
-
     card.html(`
       <img src="https://www.appsheet.com/template/gettablefileurl?appName=Bầucử-612701497&tableName=UngCuVien&fileName=${candidate['Hình ảnh']}" alt="Ảnh ứng cử viên">
       <div class="card-content">
@@ -199,14 +196,12 @@ function displayCandidates(candidates) {
         <p><i class="fas fa-map-marker-alt"></i> Tên doanh nghiệp: ${candidate['Tên doanh nghiệp']}</p>
         <p><i class="fas fa-id-badge"></i> Chức vụ trong DN: ${candidate['Chức vụ trong DN']}</p>
         <p><i class="fas fa-id-badge"></i> Chức vụ trong BIFA: ${candidate['Chức vụ trong BIFA']}</p>
-        <div class="card-buttons">
-          <button class="select-btn" data-id="${candidate.IDUCV}">Chọn</button>
-          <button class="view-info-btn"><i class="fas fa-info-circle"></i>Xem thông tin</button>
-        </div>
+      </div>
+      <div class="card-buttons">
+        <button class="select-btn" data-id="${candidate.IDUCV}">Chọn</button>
+        <button class="view-info-btn"><i class="fas fa-info-circle"></i>Xem thông tin</button>
       </div>
     `);
-
-    card.find('.view-info-btn').click(() => showMemberInfo(candidate));
 
     cardContainer.append(card);
   });
