@@ -35,7 +35,7 @@ main {
     justify-content: space-between;
     align-items: center;
     gap: 20px;
-    
+
     position: fixed;
     top: 0;
     left: 0;
@@ -43,7 +43,7 @@ main {
     z-index: 1000;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease-in-out;
-    
+
 }
 
 .search-sort-container {
@@ -103,13 +103,15 @@ button:hover {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 20px;
-    align-items: stretch; /* Đảm bảo tất cả card có cùng chiều cao */
+    align-items: stretch;
+    /* Đảm bảo tất cả card có cùng chiều cao */
 }
 
 .card {
     display: flex;
     flex-direction: column;
-    height: 100%; /* Đảm bảo card chiếm toàn bộ chiều cao của container */
+    height: 100%;
+    /* Đảm bảo card chiếm toàn bộ chiều cao của container */
     background-color: var(--card-bg);
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
@@ -126,7 +128,7 @@ button:hover {
     width: 100%;
     height: 200px;
     object-fit: contain;
-     /* Màu nền nhẹ để phân biệt với card */
+    /* Màu nền nhẹ để phân biệt với card */
 }
 
 .card-content {
@@ -152,21 +154,22 @@ button:hover {
     display: flex;
     justify-content: space-between;
     padding: 10px;
-    margin-top: auto; /* Đẩy nút xuống dưới cùng */
+    margin-top: auto;
+    /* Đẩy nút xuống dưới cùng */
 }
 
 .card-buttons button {
     flex: 1;
-  padding: 10px;
-  font-size: 14px;
-  white-space: nowrap;
+    padding: 10px;
+    font-size: 14px;
+    white-space: nowrap;
 }
 
 @media (max-width: 768px) {
     .card-buttons {
-      flex-direction: column;
+        flex-direction: column;
     }
-  }
+}
 
 .vote-btn {
     background-color: #4CAF50;
@@ -380,9 +383,9 @@ button:hover {
     width: 100%;
     max-width: 400px;
     margin: auto;
-  }
-  
-  #searchInput {
+}
+
+#searchInput {
     width: 100%;
     padding: 12px 20px;
     padding-left: 40px;
@@ -392,54 +395,56 @@ button:hover {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
     outline: none;
-    box-sizing: border-box; /* Thêm dòng này */
-  }
-  
-  #searchInput:focus {
+    box-sizing: border-box;
+    /* Thêm dòng này */
+}
+
+#searchInput:focus {
     border-color: #4CAF50;
     box-shadow: 0 2px 10px rgba(76, 175, 80, 0.3);
-  }
-  
-  #searchInput::placeholder {
+}
+
+#searchInput::placeholder {
     color: #aaa;
-  }
-  
-  .search-icon {
+}
+
+.search-icon {
     position: absolute;
     left: 15px;
     top: 50%;
     transform: translateY(-50%);
     color: #aaa;
     transition: color 0.3s ease;
-    pointer-events: none; /* Thêm dòng này */
-  }
-  
-  #searchInput:focus + .search-icon {
-    color: #4CAF50;
-  }
-  
-  /* Thêm media query cho thiết bị di động */
-  @media (max-width: 480px) {
-    #searchInput {
-      font-size: 14px;
-      padding: 10px 15px;
-      padding-left: 35px;
-    }
-    
-    .search-icon {
-      left: 12px;
-      font-size: 14px;
-    }
-  }
+    pointer-events: none;
+    /* Thêm dòng này */
+}
 
-  .sort-container {
+#searchInput:focus+.search-icon {
+    color: #4CAF50;
+}
+
+/* Thêm media query cho thiết bị di động */
+@media (max-width: 480px) {
+    #searchInput {
+        font-size: 14px;
+        padding: 10px 15px;
+        padding-left: 35px;
+    }
+
+    .search-icon {
+        left: 12px;
+        font-size: 14px;
+    }
+}
+
+.sort-container {
     position: relative;
     width: 100%;
     max-width: 300px;
     margin: auto;
-  }
-  
-  #sortSelect {
+}
+
+#sortSelect {
     width: 100%;
     padding: 12px 20px;
     padding-right: 40px;
@@ -454,14 +459,14 @@ button:hover {
     cursor: pointer;
     transition: all 0.3s ease;
     outline: none;
-  }
-  
-  #sortSelect:focus {
+}
+
+#sortSelect:focus {
     border-color: #4CAF50;
     box-shadow: 0 2px 10px rgba(76, 175, 80, 0.3);
-  }
-  
-  .sort-icon {
+}
+
+.sort-icon {
     position: absolute;
     right: 15px;
     top: 50%;
@@ -469,19 +474,109 @@ button:hover {
     color: #aaa;
     pointer-events: none;
     transition: color 0.3s ease;
-  }
-  
-  #sortSelect:focus + .sort-icon {
+}
+
+#sortSelect:focus+.sort-icon {
     color: #4CAF50;
-  }
-  
-  /* Tùy chỉnh cho các trình duyệt khác nhau */
-  #sortSelect::-ms-expand {
+}
+
+/* Tùy chỉnh cho các trình duyệt khác nhau */
+#sortSelect::-ms-expand {
     display: none;
-  }
-  
-  #sortSelect option {
+}
+
+#sortSelect option {
     background-color: white;
     color: #333;
     padding: 10px;
-  }
+}
+
+
+.voting-buttons {
+    display: flex;
+    gap: 15px;
+}
+
+#confirmVoteButton,
+#selectedCountButton {
+    padding: 12px 10px;
+    border: none;
+    border-radius: 25px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #ffffff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    outline: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Styles riêng cho nút xác nhận bầu cử */
+#confirmVoteButton {
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+}
+
+#confirmVoteButton:hover,
+#confirmVoteButton:focus {
+    background: linear-gradient(135deg, #45a049, #4CAF50);
+    box-shadow: 0 6px 8px rgba(76, 175, 80, 0.3);
+    transform: translateY(-2px);
+}
+
+
+/* Styles riêng cho nút hiển thị số lượng đã chọn */
+#selectedCountButton {
+    background: linear-gradient(135deg, #2196F3, #1e88e5);
+}
+
+
+/* Responsive styles */
+@media (max-width: 768px) {
+
+    #confirmVoteButton,
+    #selectedCountButton {
+        flex: 1;
+    }
+
+    body {
+        padding-top: 190px;
+    }
+
+    .voting-buttons {
+        flex-direction: row;
+    }
+
+    #confirmVoteButton,
+    #selectedCountButton {
+        font-size: 12px;
+        padding: 5px;
+    }
+}
+
+@media (max-width: 480px) {
+    #confirmVoteButton,
+    #selectedCountButton {
+        flex: 1;
+    }
+    body {
+        padding-top: 190px;
+    }
+
+    .voting-buttons {
+        gap: 10px;
+    }
+
+    #confirmVoteButton,
+    #selectedCountButton {
+        font-size: 11px;
+        padding: 5px;
+        letter-spacing: 0.5px;
+    }
+}
