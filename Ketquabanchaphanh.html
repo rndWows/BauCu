@@ -8,255 +8,67 @@
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
-
     <style>
         body {
             font-family: 'Roboto', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f0f4f8;
-            color: #333;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        header {
-            background-color: #3498db;
-            color: white;
-            padding: 20px 0;
-            text-align: center;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-        }
-
-        h1 {
-            margin: 0;
-            font-size: 2.5em;
-            font-weight: 700;
-        }
-
-        #totalVotes {
-            font-size: 1.2em;
-            margin: 20px 0;
-            padding: 15px;
-            background-color: #ecf0f1;
-            border-radius: 8px;
-            text-align: center;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        #lastUpdate {
-            font-size: 0.9em;
-            color: #7f8c8d;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        #chartContainer {
-            width: 100%;
-            height: 500px;
-            margin-bottom: 30px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-            background-color: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        th,
-        td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid #e0e0e0;
-        }
-
-        th {
-            background-color: #3498db;
-            color: white;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-
-        tr:last-child td {
-            border-bottom: none;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f8f9fa;
-        }
-
-        tr:hover {
-            background-color: #e8f4fd;
-        }
-
-        button {
-            display: inline-block;
-            padding: 10px 20px;
-            font-size: 16px;
-            font-weight: 700;
-            color: white;
-            background-color: #2ecc71;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin: 20px 0;
-            transition: background-color 0.3s ease;
-        }
-
-        button:hover {
-            background-color: #27ae60;
-        }
-
-        button:focus {
-            outline: none;
-        }
-
-        .sync-btn {
-            background-color: #3498db;
-            margin-left: 10px;
-        }
-
-        .sync-btn:hover {
-            background-color: #2980b9;
-        }
-
-        .position-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 5px;
-        }
-
-        .position-button {
-            padding: 5px 10px;
-            border: 1px solid #3498db;
-            border-radius: 20px;
-            background-color: white;
-            color: #3498db;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .position-button.active {
-            background-color: #3498db;
-            color: white;
-        }
-
-        .position-button:hover {
-            background-color: #e8f4fd;
-        }
-
-        /* Responsive Styles */
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2em;
-            }
-
-            th,
-            td {
-                padding: 10px 8px;
-            }
-
-            #chartContainer {
-                height: 400px;
-            }
-        }
-
-        /* Modal styles */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.4);
-        }
-
-        .modal-content {
-            background-color: #fefefe;
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 600px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: #000;
-            text-decoration: none;
-            cursor: pointer;
         }
     </style>
 </head>
 
-<body>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <header class="bg-blue-600 text-white p-6 rounded-lg shadow-lg mb-8">
+            <h1 class="text-3xl font-bold text-center">Kết Quả Bầu Cử Ban chấp hành</h1>
+        </header>
 
-    <div class="container">
-        <div id="totalVotes"></div>
-        <div id="lastUpdate"></div>
-        <div id="chartContainer"></div>
-        <button id="exportExcel">Xuất Excel</button>
-        <button id="syncData" class="sync-btn">Đồng bộ dữ liệu</button>
+        <div id="votingInfo" class="text-xl font-semibold text-center mb-4 bg-white p-4 rounded-lg shadow"></div>
+        <div id="totalVotes" class="text-xl font-semibold text-center mb-4 bg-white p-4 rounded-lg shadow"></div>
+        <div id="lastUpdate" class="text-sm text-gray-600 text-center mb-8"></div>
 
-        <table id="resultsTable">
-            <thead>
-                <tr>
-                    <th>Top</th>
-                    <th>Mã ứng viên</th>
-                    <th>Họ và Tên</th>
-                    <th>Hình ảnh ứng viên</th>
-                    <th>Số phiếu bầu</th>
-                    <th>Tỷ lệ</th>
-                    <th>Vị trí ứng cử</th>
-                    <th>Hành động</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-    </div>
-    <!-- Modal cho chi tiết ứng viên -->
-    <div id="candidateModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2 id="modalTitle"></h2>
-            <div id="modalContent"></div>
+        <div id="chartContainer" class="bg-white p-4 rounded-lg shadow-lg mb-8 h-[500px]"></div>
+
+        <button id="exportExcel"
+            class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out transform hover:scale-105 mb-8">
+            Xuất Excel
+        </button>
+
+        <div class="overflow-x-auto">
+            <table id="resultsTable" class="w-full bg-white rounded-lg shadow-lg">
+                <thead>
+                    <tr class="bg-blue-600 text-white">
+                        <th class="py-3 px-4 text-left">Top</th>
+                        <th class="py-3 px-4 text-left">Mã ứng viên</th>
+                        <th class="py-3 px-4 text-left">Họ và Tên</th>
+                        <th class="py-3 px-4 text-left">Hình ảnh ứng viên</th>
+                        <th class="py-3 px-4 text-left">Số phiếu bầu</th>
+                        <th class="py-3 px-4 text-left">Tỷ lệ</th>
+                        <th class="py-3 px-4 text-left">Hành động</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
         </div>
     </div>
+
+    <!-- Modal cho chi tiết ứng viên -->
+    <div id="candidateModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
+        <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-1/2 shadow-lg rounded-md bg-white">
+            <div class="flex justify-between items-center">
+                <h2 id="modalTitle" class="text-2xl font-bold"></h2>
+                <span class="close text-2xl cursor-pointer">&times;</span>
+            </div>
+            <div id="modalContent" class="mt-4"></div>
+        </div>
+    </div>
+
     <script>
         const appId = 'd457dee0-9328-402a-af94-cd3358dbad1c';
         const accessKey = 'V2-MHoFx-64XnM-FJO7E-521rK-jB06n-cU7bN-oq6bW-KNMRV';
         const region = 'www';
         let chart;
         let electionResults = [];
-        let tempChanges = {};
-
-        const positions = ['Chủ tịch', 'Phó chủ tịch', 'Ủy viên', 'Thư ký', 'Khác'];
 
         function apiRequest(tableName, action, data) {
             const apiUrl = `https://${region}.appsheet.com/api/v2/apps/${appId}/tables/${tableName}/Action`;
@@ -288,6 +100,7 @@
         }
 
         function processCandidatesAndVotes(candidates, votes) {
+            const uniqueVoters = new Set(votes.map(vote => vote.IDCT)).size;
             const totalVotes = votes.length;
             const candidateVotes = votes.reduce((acc, vote) => {
                 acc[vote.IDUCV] = (acc[vote.IDUCV] || 0) + 1;
@@ -299,24 +112,18 @@
                 name: candidate['Họ Và Tên'],
                 hinhanh: candidate['Hình ảnh'],
                 ngaysinh: candidate['Ngày Sinh'],
-                position: candidate['Vị trí ứng cử'],
                 votes: candidateVotes[candidate.IDUCV] || 0,
                 percentage: ((candidateVotes[candidate.IDUCV] || 0) / totalVotes * 100).toFixed(2)
             })).sort((a, b) => b.votes - a.votes);
 
-            // Áp dụng các thay đổi tạm thời
-            electionResultsData.forEach(candidate => {
-                if (tempChanges[candidate.id]) {
-                    candidate.position = tempChanges[candidate.id].join(', ');
-                }
-            });
-
-            updateUI(totalVotes, electionResultsData);
+            updateUI(totalVotes, uniqueVoters, electionResultsData);
         }
 
-        function updateUI(totalVotes, results) {
+        function updateUI(totalVotes, uniqueVoters, results) {
             electionResults = results;
-            $('#totalVotes').text(`Tổng số lượt bầu cử: ${totalVotes}`);
+            $('#votingInfo').html(`Số người bầu cử: <span class="text-blue-600">${uniqueVoters}</span>
+                                    <br>
+                                    Tổng số phiếu bầu cử: <span class="text-green-600">${totalVotes}</span>`);
             $('#lastUpdate').text(`Cập nhật lần cuối: ${new Date().toLocaleString('vi-VN')}`);
             updateChart(results);
             updateTable(results);
@@ -330,10 +137,17 @@
                     chart: {
                         type: 'column',
                         animation: Highcharts.svg,
-                        marginRight: 10
+                        marginRight: 10,
+                        style: {
+                            fontFamily: 'Roboto, sans-serif'
+                        }
                     },
                     title: {
-                        text: 'Kết Quả Bầu Cử'
+                        text: 'Kết Quả Bầu Cử Ban chấp hành',
+                        style: {
+                            fontSize: '24px',
+                            fontWeight: 'bold'
+                        }
                     },
                     xAxis: {
                         type: 'category',
@@ -347,7 +161,7 @@
                     },
                     yAxis: {
                         title: {
-                            text: 'Số phiếu bầu '
+                            text: 'Số phiếu bầu'
                         }
                     },
                     legend: {
@@ -366,7 +180,8 @@
                                 fontSize: '13px',
                                 fontFamily: 'Roboto, sans-serif'
                             }
-                        }
+                        },
+                        color: '#3B82F6'
                     }]
                 });
             }
@@ -376,42 +191,19 @@
             const tableBody = $('#resultsTable tbody');
             tableBody.empty();
             data.forEach((item, index) => {
-                const positionButtons = positions.map(pos =>
-                    `<button class="position-button ${item.position && item.position.includes(pos) ? 'active' : ''}" 
-                     data-position="${pos}">${pos}</button>`
-                ).join('');
-
                 tableBody.append(`
-                    <tr>
-                        <td>${index + 1}</td>
-                        <td>${item.id}</td>
-                        <td>${item.name}</td>
-                        <td><img src="https://www.appsheet.com/template/gettablefileurl?appName=Bầucử-612701497&tableName=UngCuVien&fileName=${item.hinhanh}" width="50px" alt="Ảnh ứng cử viên"></td>
-                        <td>${item.votes}</td>
-                        <td>${item.percentage}%</td>
-                        <td>
-                            <div class="position-buttons" data-id="${item.id}">
-                                ${positionButtons}
-                            </div>
-                        </td>
-                        <td>
-                            <button class="detail-btn" data-id="${item.id}">Xem chi tiết</button>
+                    <tr class="border-b hover:bg-gray-100 transition duration-300">
+                        <td class="py-3 px-4">${index + 1}</td>
+                        <td class="py-3 px-4">${item.id}</td>
+                        <td class="py-3 px-4">${item.name}</td>
+                        <td class="py-3 px-4"><img src="https://www.appsheet.com/template/gettablefileurl?appName=Bầucử-612701497&tableName=UngCuVien&fileName=${item.hinhanh}" width="50px" alt="Ảnh ứng cử viên" class="rounded-full"></td>
+                        <td class="py-3 px-4">${item.votes}</td>
+                        <td class="py-3 px-4">${item.percentage}%</td>
+                        <td class="py-3 px-4">
+                            <button class="detail-btn bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out transform hover:scale-105" data-id="${item.id}">Xem chi tiết</button>
                         </td>
                     </tr>
                 `);
-            });
-
-            // Thêm event listener cho các nút vị trí
-            $('.position-button').on('click', function() {
-                const candidateId = $(this).closest('.position-buttons').data('id');
-                const position = $(this).data('position');
-                $(this).toggleClass('active');
-                
-                const selectedPositions = $(this).closest('.position-buttons').find('.position-button.active').map(function() {
-                    return $(this).data('position');
-                }).get();
-                
-                tempChanges[candidateId] = selectedPositions;
             });
         }
 
@@ -420,59 +212,27 @@
             if (candidate) {
                 $('#modalTitle').text(candidate.name);
                 $('#modalContent').html(`
-                    <p><strong>Mã ứng viên:</strong> ${candidate.id}</p>
-                    <p><strong>Số phiếu bầu:</strong> ${candidate.votes}</p>
-                    <p><strong>Tỷ lệ:</strong> ${candidate.percentage}%</p>
-                    <p><strong>Ngày sinh:</strong> ${candidate.ngaysinh}</p>
-                    <p><strong>Vị trí ứng cử:</strong> ${candidate.position || 'Chưa có'}</p>
-                    <img src="https://www.appsheet.com/template/gettablefileurl?appName=Bầucử-612701497&tableName=UngCuVien&fileName=${candidate.hinhanh}" alt="Ảnh ứng cử viên" style="max-width: 200px;">
+                    <p class="mb-2"><strong>Mã ứng viên:</strong> ${candidate.id}</p>
+                    <p class="mb-2"><strong>Số phiếu bầu:</strong> ${candidate.votes}</p>
+                    <p class="mb-2"><strong>Tỷ lệ:</strong> ${candidate.percentage}%</p>
+                    <p class="mb-2"><strong>Ngày sinh:</strong> ${candidate.ngaysinh}</p>
+                    <img src="https://www.appsheet.com/template/gettablefileurl?appName=Bầucử-612701497&tableName=UngCuVien&fileName=${candidate.hinhanh}" alt="Ảnh ứng cử viên" class="mt-4 rounded-lg max-w-full h-auto">
                 `);
-                $('#candidateModal').css('display', 'block');
-            }
-        }
-
-        function syncDataToDatabase() {
-            const updates = Object.entries(tempChanges).map(([id, positions]) => ({
-                IDUCV: id,
-                'Vị trí ứng cử': positions.join(', ')
-            }));
-
-            if (updates.length > 0) {
-                apiRequest('UngCuVien', 'Edit', { Rows: updates })
-                    .then(() => {
-                        alert('Dữ liệu đã được đồng bộ thành công!');
-                        tempChanges = {};
-                        loadData(); // Tải lại dữ liệu sau khi đồng bộ
-                    })
-                    .catch(error => {
-                        console.error('Lỗi khi đồng bộ dữ liệu:', error);
-                        alert('Có lỗi xảy ra khi đồng bộ dữ liệu. Vui lòng thử lại.');
-                    });
-            } else {
-                alert('Không có thay đổi nào để đồng bộ.');
+                $('#candidateModal').removeClass('hidden');
             }
         }
 
         function exportToExcel(results) {
-            // Chỉ lấy 50 người có số phiếu nhiều nhất
             const top50Results = results.slice(0, 50);
-
-            // Tạo dữ liệu cho Excel
             const data = top50Results.map((item, index) => ({
                 'STT': index + 1,
                 'Họ và Tên': item.name,
                 'Số Lượt Bầu Cử': item.votes,
                 'Tỷ Lệ': item.percentage + '%'
             }));
-
-            // Tạo worksheet từ dữ liệu
             const worksheet = XLSX.utils.json_to_sheet(data);
-
-            // Tạo workbook và thêm worksheet vào
             const workbook = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(workbook, worksheet, 'Kết Quả Bầu Cử');
-
-            // Xuất file Excel
             XLSX.writeFile(workbook, 'ket_qua_bau_cu.xlsx');
         }
 
@@ -484,8 +244,6 @@
         $(document).ready(() => {
             startAutoUpdate();
 
-            $('#syncData').click(syncDataToDatabase);
-
             $('#exportExcel').click(() => exportToExcel(electionResults));
 
             $(document).on('click', '.detail-btn', function () {
@@ -494,15 +252,16 @@
             });
 
             $('.close').click(() => {
-                $('#candidateModal').css('display', 'none');
+                $('#candidateModal').addClass('hidden');
             });
 
             $(window).click((event) => {
                 if (event.target == document.getElementById('candidateModal')) {
-                    $('#candidateModal').css('display', 'none');
+                    $('#candidateModal').addClass('hidden');
                 }
             });
         });
     </script>
 </body>
+
 </html>
