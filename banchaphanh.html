@@ -122,7 +122,7 @@
             border: none;
             border-radius: 30px;
             font-size: 14px;
-            padding: 10px 20px;
+            padding: 8px 16px;
             transition: all 0.3s ease;
             box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
         }
@@ -278,20 +278,12 @@
 
         .candidate-card .view-info-btn:hover {
             background-color: #ced4da;
-            /* Màu xám nhạt khi hover */
             transform: translateY(-3px);
             box-shadow: 0 8px 20px rgba(108, 117, 125, 0.3);
         }
 
         #controlPanel {
             display: block;
-        }
-
-        @media (max-width: 768px) {
-            #controlPanel {
-                display: none;
-                /* Ẩn controlPanel mặc định trên di động */
-            }
         }
     </style>
 </head>
@@ -301,24 +293,59 @@
         <div class="spinner"></div>
     </div>
 
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <h2 class="text-2xl font-bold mb-4 text-center">Đăng Nhập</h2>
+            <div class="mb-4">
+                <label for="loginUsername" class="block text-sm font-medium text-gray-700 mb-1">Tên đăng nhập</label>
+                <input type="text" id="loginUsername"
+                    class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div class="mb-4">
+                <label for="loginPassword" class="block text-sm font-medium text-gray-700 mb-1">Mật khẩu</label>
+                <input type="password" id="loginPassword"
+                    class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div class="mb-4 flex items-center">
+                <input type="checkbox" id="rememberLogin" class="mr-2">
+                <label for="rememberLogin" class="text-sm text-gray-600">Ghi nhớ đăng nhập</label>
+            </div>
+            <button id="loginButton"
+                class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out">
+                Đăng nhập
+            </button>
+        </div>
+    </div>
+
     <div id="fui-toast"></div>
 
-    <!-- Thêm nút ẩn/hiện vào ngay trước control panel -->
-    <div class="md:hidden fixed bottom-4 right-4 z-50">
-        <button id="toggleControlPanel"
+    <!-- Member Info Modal -->
+    <div class="InfoModal fixed bottom-4 right-4 z-50 flex flex-col gap-2">
+        <button id="confirmVoteButton"
             class="bg-blue-500 hover:bg-blue-600 text-white rounded-full p-3 shadow-lg transition duration-300 ease-in-out">
-            <i class="fas fa-bars"></i>
+            <i class="fas fa-paper-plane"></i>
+        </button>
+        <button id="selectedCountButton"
+            class="bg-blue-500 hover:bg-blue-600 text-white rounded-full p-3 shadow-lg transition duration-300 ease-in-out">
+            <span id="selectedCountText" class="text-sm font-medium">0</span>
+        </button>
+
+        <button id="refreshButton"
+            class="bg-blue-500 hover:bg-blue-600 text-white rounded-full p-3 shadow-lg transition duration-300 ease-in-out">
+            <i class="fas fa-sync-alt"></i>
         </button>
     </div>
 
-    <main class="container mx-auto px-4 py-8">
+    <main class="container mx-auto px-4">
         <div id="controlPanel"
             class="control-panel bg-white rounded-lg shadow-md p-6 mb-8 sticky top-0 z-40 transform transition-transform duration-300 ease-in-out md:translate-y-0">
             <div class="flex flex-col lg:flex-row items-center justify-between gap-4">
                 <div class="flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto">
                     <div class="flex items-center gap-4">
                         <img src="https://www.bifa.vn/Data/Sites/1/skins/default/favicon.ico" alt="Bầu cử Ban chấp hành"
-                            class="h-10 w-10">
+                            class="h-8 w-8">
                         <h1 class="text-2xl font-bold whitespace-nowrap">Bầu cử Ban chấp hành</h1>
                     </div>
 
@@ -326,36 +353,8 @@
                         <form id="searchForm" class="w-full">
                             <input type="text" id="searchInput"
                                 class="w-full px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                placeholder="Tìm kiếm theo tên ứng viên">
+                                placeholder="Tìm kiếm ứng viên">
                         </form>
-                    </div>
-                </div>
-                <div class="flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto">
-                    <div class="voting-buttons flex gap-2 w-full sm:w-auto">
-                        <button id="confirmVoteButton"
-                            class="w-full sm:w-auto bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:-translate-y-1">
-                            Xác nhận
-                        </button>
-                        <button id="selectedCountButton"
-                            class="w-full sm:w-auto bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:-translate-y-1">
-                            Đã chọn 0 UCV
-                        </button>
-                    </div>
-                    <div
-                        class="pagination-container flex items-center gap-2 w-full sm:w-auto justify-center sm:justify-end">
-                        <button id="prevPage"
-                            class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out">
-                            <i class="fas fa-chevron-left"></i>
-                        </button>
-                        <span id="pageInfo" class="text-gray-600"></span>
-                        <button id="nextPage"
-                            class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out">
-                            <i class="fas fa-chevron-right"></i>
-                        </button>
-                        <button id="refreshButton"
-                            class="bg-blue-500 hover:bg-blue-600 text-white font-bold p-2 rounded-full transition duration-300 ease-in-out">
-                            <i class="fas fa-sync-alt"></i>
-                        </button>
                     </div>
                 </div>
             </div>
@@ -367,7 +366,7 @@
     <div id="selectedCandidatesModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <h2 class="text-2xl font-bold mb-4">Danh sách ứng cử viên đã chọn</h2>
+            <h2 class="text-2xl font-bold mb-4 text-center">Ứng cử viên đã chọn</h2>
             <ul id="selectedCandidatesList" class="space-y-2"></ul>
         </div>
     </div>
@@ -375,13 +374,11 @@
     <div id="voteModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <h2 class="text-2xl font-bold mb-4">Bầu cử Ban Chấp Hành</h2>
-            <h2 class="text-2xl font-bold mb-4"><i class="fas fa-vote-yea mr-2"></i> Nhập ID Cử Tri</h2>
-            <input type="text" id="voterIdInput" placeholder="Nhập IDCT"
-                class="w-full px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4">
+            <h2 class="text-2xl font-bold mb-4">Xác nhận bầu cử</h2>
+            <p id="selectedCountText"></p>
             <button id="submitVoteButton"
                 class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out">
-                <i class="fas fa-check mr-2"></i> Xác nhận
+                <i class="fas fa-check mr-2"></i> Xác nhận bầu cử
             </button>
         </div>
     </div>
@@ -407,11 +404,9 @@
         const region = 'www';
         const MIN_VOTES = 25;
         const MAX_VOTES = 27;
-        const itemsPerPage = 16;
 
         // Global variables
         let allCandidates = [];
-        let currentPage = 1;
         let selectedCandidates = [];
         let currentFilteredCandidates = [];
 
@@ -445,8 +440,175 @@
                 })
             });
         }
+
+
+
+        // Thêm vào phần đầu với các constants
+        const usersTableName = 'CuTri'; // Tên bảng chứa thông tin người dùng
+
+        // Thêm biến để theo dõi trạng thái đăng nhập
+        let currentUser = null;
+
+        // Hàm kiểm tra đăng nhập
+        function checkLoginStatus() {
+            const savedUsername = localStorage.getItem('username');
+            const savedToken = localStorage.getItem('loginToken');
+
+            if (savedUsername && savedToken) {
+                // Nếu đã có thông tin đăng nhập thì gọi autoLogin 1 lần
+                autoLogin(savedUsername, savedToken);
+            } else {
+                // Nếu chưa có thông tin thì hiển thị form đăng nhập
+                hideLoading(); // Ẩn loading nếu đang hiển thị
+                showLoginModal();
+            }
+        }
+
+        // Hàm hiển thị modal đăng nhập
+        function showLoginModal() {
+            $('#loginModal').show();
+            // Ẩn nội dung chính
+            $('main').hide();
+        }
+
+        // Hàm ẩn modal đăng nhập
+        function hideLoginModal() {
+            $('#loginModal').hide();
+            // Hiện nội dung chính
+            $('main').show();
+        }
+
+        // Hàm xử lý đăng nhập
+        async function handleLogin() {
+            const username = $('#loginUsername').val();
+            const password = $('#loginPassword').val();
+            const rememberMe = $('#rememberLogin').is(':checked');
+
+            if (!username || !password) {
+                FuiToast.info('Vui lòng nhập đầy đủ thông tin đăng nhập');
+                return;
+            }
+
+            showLoading();
+
+            try {
+                const result = await apiRequest('CuTri', 'Find', {
+                    Properties: {
+                        Selector: `Filter(CuTri, and([username] = "${username}", [password] = "${password}"))`
+                    }
+                });
+
+                if (result && Array.isArray(result) && result.length === 1) {
+                    const user = result[0];
+                    handleSuccessfulLogin(user, rememberMe);
+                } else {
+                    FuiToast.error('Tên đăng nhập hoặc mật khẩu không đúng');
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                FuiToast.error('Đã có lỗi xảy ra khi đăng nhập');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Hàm xử lý khi đăng nhập thành công
+        function handleSuccessfulLogin(user, rememberMe) {
+            if (user['Trạng Thái PB Ban Chấp Hành'] === 'Đã bầu cử') {
+                FuiToast.info('Bạn đã hoàn thành bầu cử');
+                return;
+            }
+
+            if (user['Tình trạng cử tri'] !== 'Hợp lệ') {
+                FuiToast.error('Tài khoản không được phép truy cập');
+                handleLogout();
+                return;
+            }
+
+            currentUser = user;
+
+            if (rememberMe) {
+                localStorage.setItem('username', user.IDCT);
+                localStorage.setItem('loginToken', 'token-' + Date.now());
+            }
+
+            // Xóa các UI elements cũ nếu có
+            $('.InfoModal .flex .text-sm').remove();
+            $('.InfoModal .flex button.bg-red-500').remove();
+
+            // Thêm UI elements mới
+            const userInfo = $('<div>')
+                .addClass('text-sm text-gray-600 mr-4')
+                .text(`Xin chào, ${user['Họ Và Tên']}`);
+
+            const logoutBtn = $('<button>')
+                .addClass('bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-full text-sm')
+                .text('Đăng xuất')
+                .click(handleLogout);
+
+            // Thêm vào vị trí cuối của flex container trong InfoModal
+            $('.InfoModal .flex:first').append(userInfo, logoutBtn);
+
+
+            hideLoginModal();
+            FuiToast.success('Đăng nhập thành công');
+            loadData();
+        }
+
+        // Hàm xử lý đăng xuất
+        function handleLogout() {
+            localStorage.removeItem('username');
+            localStorage.removeItem('loginToken');
+            currentUser = null;
+            selectedCandidates = [];
+            saveSelectedCandidates();
+
+
+            // Reset UI
+            $('main').hide();
+            $('#loginUsername').val('');
+            $('#loginPassword').val('');
+            $('#rememberLogin').prop('checked', false);
+
+            showLoginModal();
+            FuiToast.info('Đã đăng xuất');
+        }
+
+        // Hàm tự động đăng nhập
+        async function autoLogin(username, token) {
+            if (!username || !token) {
+                showLoginModal();
+                return;
+            }
+
+            showLoading();
+
+            try {
+                const result = await apiRequest('CuTri', 'Find', {
+                    Properties: {
+                        Selector: `Filter(CuTri, [IDCT] = "${username}")`
+                    }
+                });
+
+                if (result && result.length === 1) {
+                    handleSuccessfulLogin(result[0], true);
+                } else {
+                    // Nếu auto login thất bại thì xóa thông tin và hiện form đăng nhập
+                    localStorage.removeItem('username');
+                    localStorage.removeItem('loginToken');
+                    showLoginModal();
+                }
+            } catch (error) {
+                console.error('Auto login error:', error);
+                localStorage.removeItem('username');
+                localStorage.removeItem('loginToken');
+                showLoginModal();
+            } finally {
+                hideLoading();
+            }
+        }
+
         function resetPage() {
-            currentPage = 1;
             selectedCandidates = [];
             currentFilteredCandidates = [];
             $('#searchInput').val('');
@@ -454,10 +616,15 @@
         }
 
         function loadData() {
+            if (!currentUser) {
+                showLoginModal();
+                return;
+            }
+
             showLoading();
             resetPage();  // Add this line
             Promise.all([
-                apiRequest('UngCuVien', 'Find', { Rows: [], Properties: { Selector: 'Filter(UngCuVien, true)' } }),
+                apiRequest('UngCuVien', 'Find', { Rows: [], Properties: { Selector: 'Filter(UngCuVien, [Trạng thái]="Đã duyệt")' } }),
                 apiRequest('PhieuBau', 'Find', { Rows: [], Properties: { Selector: 'Filter(PhieuBau, true)' } })
             ]).then(([candidates, votes]) => {
                 processCandidatesAndVotes(candidates, votes);
@@ -494,23 +661,15 @@
         }
 
         function updateCandidatesDisplay() {
-            const startIndex = (currentPage - 1) * itemsPerPage;
-            const candidatesToShow = currentFilteredCandidates.slice(startIndex, startIndex + itemsPerPage);
+            const candidatesToShow = currentFilteredCandidates;
 
             const cardContainer = $('#cardContainer');
-            cardContainer.children().each((index, element) => {
-                if (index < candidatesToShow.length) {
-                    updateCandidateCard($(element), candidatesToShow[index]);
-                } else {
-                    $(element).remove();
-                }
+            cardContainer.empty();
+
+            candidatesToShow.forEach(candidate => {
+                cardContainer.append(createCandidateCard(candidate));
             });
 
-            for (let i = cardContainer.children().length; i < candidatesToShow.length; i++) {
-                cardContainer.append(createCandidateCard(candidatesToShow[i]));
-            }
-
-            updatePagination();
             updateUIWithSelectedCandidates();
             animateCards();
         }
@@ -577,15 +736,9 @@
             updateSelectedCount();
         }
 
-        function updatePagination() {
-            const totalPages = Math.ceil(currentFilteredCandidates.length / itemsPerPage);
-            $('#pageInfo').text(`Trang ${currentPage} / ${totalPages}`);
-            $('#prevPage').prop('disabled', currentPage === 1);
-            $('#nextPage').prop('disabled', currentPage === totalPages);
-        }
 
         function updateSelectedCount() {
-            $('#selectedCountButton').text(`Đã chọn ${selectedCandidates.length} UCV`);
+            $('#selectedCountButton').text(`${selectedCandidates.length}`);
         }
 
         function updateConfirmButton() {
@@ -674,11 +827,22 @@
                 FuiToast.info(`Vui lòng chọn tối đa ${MAX_VOTES} ứng cử viên.`);
                 return;
             }
+
+            // Cập nhật text hiển thị số lượng đã chọn
+            $('#selectedCountText').text(`Bạn đã chọn ${selectedCandidates.length} ứng cử viên`);
+
             $('#voteModal').show();
         }
 
         async function submitVote() {
-            const voterId = $('#voterIdInput').val().trim();
+
+            if (!currentUser) {
+                FuiToast.error('Vui lòng đăng nhập để thực hiện bầu cử');
+                showLoginModal();
+                return;
+            }
+
+            const voterId = currentUser.IDCT;
             if (!voterId) {
                 FuiToast.info('Vui lòng nhập mã ID cử tri.');
                 return;
@@ -743,8 +907,6 @@
                 candidate.IDUCV.toLowerCase().includes(searchTerm) ||
                 candidate['Tên doanh nghiệp'].toLowerCase().includes(searchTerm)
             );
-            currentPage = 1;
-            updateCandidatesDisplay();
         }
 
         // Utility functions
@@ -761,16 +923,24 @@
             }
         }
 
-        // Biến để theo dõi trạng thái hiển thị của controlPanel trên điện thoại
-        let isControlPanelVisible = false;
 
         // Event Listeners
         $(document).ready(() => {
-            selectedCandidates = loadSelectedCandidates();
-            loadData();
+            // Ẩn main content ban đầu
+            $('main').hide();
 
-            $('#refreshButton').click(loadData);
+            // Kiểm tra đăng nhập 1 lần khi load trang
+            checkLoginStatus();
 
+            // Event listeners cho đăng nhập
+            $('#loginButton').click(handleLogin);
+
+            // Cho phép đăng nhập bằng Enter key
+            $('#loginPassword').keypress((e) => {
+                if (e.which === 13) handleLogin();
+            });
+
+            // Event listeners cho search và filter
             $('#searchForm').on('submit', (e) => {
                 e.preventDefault();
                 handleSearch();
@@ -778,22 +948,17 @@
 
             $('#searchInput').off('input').on('input', throttle(handleSearch, 300));
 
-            $('#prevPage').click(() => {
-                if (currentPage > 1) {
-                    currentPage--;
-                    updateCandidatesDisplay();
-                }
-            });
-
-            $('#nextPage').click(() => {
-                currentPage++;
-                updateCandidatesDisplay();
-            });
-
+            // Event listeners cho bầu cử
             $('#confirmVoteButton').click(confirmVote);
             $('#selectedCountButton').click(openSelectedCandidatesModal);
             $('#submitVoteButton').click(submitVote);
+            $('#refreshButton').click(() => {
+                if (currentUser) {
+                    loadData();
+                }
+            });
 
+            // Event listeners cho xem thông tin ứng viên
             $(document).on('click', '.view-info-btn', function () {
                 const candidateId = $(this).closest('.candidate-card').find('p:contains("ID UCV:")').text().split(': ')[1];
                 const candidate = allCandidates.find(c => c.IDUCV === candidateId);
@@ -802,6 +967,7 @@
                 }
             });
 
+            // Event listener cho chọn ứng viên
             $(document).on('click', '.select-btn', function () {
                 const candidateId = $(this).data('id');
                 if (selectedCandidates.includes(candidateId)) {
@@ -820,20 +986,12 @@
                 updateSelectedCount();
             });
 
-
-
-            // Modal close events
+            // Event listeners cho đóng modal
             $('.close, .modal-close').click(function () {
                 $(this).closest('.modal, .modal-mask').hide();
             });
 
-            $('.modal, .modal-mask').click(function (event) {
-                if (event.target === this) {
-                    $(this).hide();
-                }
-            });
-
-            // Button animation
+            // Animation cho buttons
             $('button').on('mouseenter', function () {
                 anime({
                     targets: this,
@@ -850,34 +1008,8 @@
                 });
             });
 
-            // Thêm event listener mới cho nút toggle
-            $('#toggleControlPanel').click(() => {
-                const controlPanel = $('#controlPanel');
-
-                // Kiểm tra kích thước màn hình để chỉ ẩn/hiện trên điện thoại
-                if (window.innerWidth < 768) {
-                    isControlPanelVisible = !isControlPanelVisible; 
-
-                    if (isControlPanelVisible) {
-                        controlPanel.css('display', 'block'); // Hiện controlPanel trên điện thoại
-                        $('#toggleControlPanel i').removeClass('fa-bars').addClass('fa-times');
-                    } else {
-                        controlPanel.css('display', 'none'); // Ẩn controlPanel trên điện thoại
-                        $('#toggleControlPanel i').removeClass('fa-times').addClass('fa-bars');
-                    }
-                }
-            });
-
-            // Xử lý khi thay đổi kích thước màn hình để đảm bảo controlPanel luôn hiển thị trên máy tính
-            $(window).resize(() => {
-                if (window.innerWidth >= 768) {
-                    $('#controlPanel').css('display', 'block'); // Hiện controlPanel trên máy tính
-                    isControlPanelVisible = true;
-                } else if (!isControlPanelVisible) {
-                    $('#controlPanel').css('display', 'none'); // Ẩn controlPanel trên điện thoại nếu chưa hiển thị
-                }
-            });
-
+            // Xử lý responsive controlPanel
+            let isControlPanelVisible = false;
         });
     </script>
 </body>
