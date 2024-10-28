@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
     <title>Bầu cử Ban Chấp Hành</title>
+    <link rel="shortcut icon" href="https://www.bifa.vn/Data/Sites/1/skins/default/favicon.ico" type="image/x-icon">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css"
         href="https://cdn.jsdelivr.net/gh/lelinh014756/fui-toast-js@master/assets/css/toast@1.0.1/fuiToast.min.css">
@@ -105,8 +106,192 @@
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Nút màu xanh (Chọn, Đã chọn, Làm mới) */
+        button.bg-blue-500 {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 14px;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+        }
+
+        button.bg-blue-500:hover {
+            background-color: #0056b3;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 123, 255, 0.4);
+        }
+
+        /* Nút màu xanh lá (Xác nhận, Xem thông tin) */
+        button.bg-green-500 {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 14px;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        button.bg-green-500:hover {
+            background-color: #218838;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(40, 167, 69, 0.4);
+        }
+
+        /* Nút phân trang (Trái, Phải) */
+        button.bg-gray-200 {
+            background-color: #e2e6ea;
+            color: #495057;
+            border: none;
+            border-radius: 30px;
+            font-size: 14px;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(108, 117, 125, 0.2);
+        }
+
+        button.bg-gray-200:hover {
+            background-color: #ced4da;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(108, 117, 125, 0.3);
+        }
+
+        /* Hiệu ứng khi bấm vào nút */
+        button:active {
+            transform: translateY(2px);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Thẻ ứng cử viên */
+        .candidate-card {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .candidate-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Hình ảnh ứng cử viên */
+        .candidate-card img {
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+            object-fit: contain;
+            height: 300px;
+            width: 100%;
+        }
+
+        /* Nội dung thẻ */
+        .candidate-card .p-4 {
+            padding: 20px;
+            font-family: 'Roboto', sans-serif;
+            color: #333;
+        }
+
+        /* Tiêu đề và tên ứng cử viên */
+        .candidate-card h2 {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #2c3e50;
+            text-align: center;
+        }
+
+        /* Thông tin ứng cử viên */
+        .candidate-card p {
+            margin-bottom: 8px;
+            color: #555;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* Icon và văn bản trong thẻ */
+        .candidate-card p i {
+            margin-right: 8px;
+            color: #3498db;
+        }
+
+        /* Các nút chọn và xem thông tin */
+        .candidate-card .select-btn,
+        .candidate-card .view-info-btn {
+            padding: 8px 12px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .candidate-card .select-btn {
+            background-color: #007bff;
+            /* Màu xanh dương */
+            color: white;
+            border: none;
+            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+        }
+
+        .candidate-card .select-btn:hover {
+            background-color: #0056b3;
+            /* Xanh dương đậm khi hover */
+            transform: translateY(-3px);
+        }
+
+
+        .candidate-card .select-btn.selected {
+            background-color: #28a745;
+            /* Màu xanh lá */
+            color: white;
+            border: none;
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.2);
+        }
+
+        .candidate-card .select-btn.selected:hover {
+            background-color: #218838;
+            /* Xanh lá đậm khi hover */
+            transform: translateY(-3px);
+        }
+
+        .candidate-card .view-info-btn {
+            background-color: #ced4da;
+            color: #495057;
+            border: none;
+            box-shadow: 0 5px 15px rgba(108, 117, 125, 0.2);
+        }
+
+        .candidate-card .view-info-btn:hover {
+            background-color: #ced4da;
+            /* Màu xám nhạt khi hover */
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(108, 117, 125, 0.3);
+        }
+
+        #controlPanel {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            #controlPanel {
+                display: none;
+                /* Ẩn controlPanel mặc định trên di động */
+            }
         }
     </style>
 </head>
@@ -118,11 +303,25 @@
 
     <div id="fui-toast"></div>
 
+    <!-- Thêm nút ẩn/hiện vào ngay trước control panel -->
+    <div class="md:hidden fixed bottom-4 right-4 z-50">
+        <button id="toggleControlPanel"
+            class="bg-blue-500 hover:bg-blue-600 text-white rounded-full p-3 shadow-lg transition duration-300 ease-in-out">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+
     <main class="container mx-auto px-4 py-8">
-        <div class="control-panel bg-white rounded-lg shadow-md p-6 mb-8 sticky top-0 z-40">
+        <div id="controlPanel"
+            class="control-panel bg-white rounded-lg shadow-md p-6 mb-8 sticky top-0 z-40 transform transition-transform duration-300 ease-in-out md:translate-y-0">
             <div class="flex flex-col lg:flex-row items-center justify-between gap-4">
                 <div class="flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto">
-                    <h1 class="text-2xl font-bold whitespace-nowrap">Bầu cử Ban chấp hành</h1>
+                    <div class="flex items-center gap-4">
+                        <img src="https://www.bifa.vn/Data/Sites/1/skins/default/favicon.ico" alt="Bầu cử Ban chấp hành"
+                            class="h-10 w-10">
+                        <h1 class="text-2xl font-bold whitespace-nowrap">Bầu cử Ban chấp hành</h1>
+                    </div>
+
                     <div class="search-sort-container w-full sm:w-64">
                         <form id="searchForm" class="w-full">
                             <input type="text" id="searchInput"
@@ -142,7 +341,8 @@
                             Đã chọn 0 UCV
                         </button>
                     </div>
-                    <div class="pagination-container flex items-center gap-2 w-full sm:w-auto justify-center sm:justify-end">
+                    <div
+                        class="pagination-container flex items-center gap-2 w-full sm:w-auto justify-center sm:justify-end">
                         <button id="prevPage"
                             class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out">
                             <i class="fas fa-chevron-left"></i>
@@ -205,9 +405,9 @@
         const appId = 'd457dee0-9328-402a-af94-cd3358dbad1c';
         const accessKey = 'V2-MHoFx-64XnM-FJO7E-521rK-jB06n-cU7bN-oq6bW-KNMRV';
         const region = 'www';
-        const MIN_VOTES = 20;
-        const MAX_VOTES = 23;
-        const itemsPerPage = 12;
+        const MIN_VOTES = 25;
+        const MAX_VOTES = 27;
+        const itemsPerPage = 16;
 
         // Global variables
         let allCandidates = [];
@@ -281,7 +481,7 @@
 
             currentFilteredCandidates = [...allCandidates];
             updateCandidatesDisplay();
-            updateUIWithSelectedCandidates(); 
+            updateUIWithSelectedCandidates();
         }
 
         // UI Management
@@ -318,7 +518,7 @@
         function createCandidateCard(candidate) {
             return $(`
             <div class="candidate-card bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:shadow-lg hover:-translate-y-1 flex flex-col h-full">
-                <img src="https://www.appsheet.com/template/gettablefileurl?appName=Bầucử-612701497&tableName=UngCuVien&fileName=${candidate['Hình ảnh']}" 
+                <img src="${candidate['Hình ảnh']}" 
                      alt="Ảnh ứng cử viên" class="w-full h-48 object-cover">
                 <div class="p-4 flex-grow">
                     <h2 class="text-xl font-bold mb-2">${candidate['Họ Và Tên']}</h2>
@@ -343,7 +543,7 @@
         }
 
         function updateCandidateCard($card, candidate) {
-            $card.find('img').attr('src', `https://www.appsheet.com/template/gettablefileurl?appName=Bầucử-612701497&tableName=UngCuVien&fileName=${candidate['Hình ảnh']}`);
+            $card.find('img').attr('src', `${candidate['Hình ảnh']}`);
             $card.find('h2').text(candidate['Họ Và Tên']);
             $card.find('p:eq(0)').html(`<i class="fas fa-id-card mr-2"></i> ID UCV: ${candidate.IDUCV}`);
             $card.find('p:eq(1)').html(`<i class="fas fa-birthday-cake mr-2"></i> Ngày Sinh: ${candidate['Ngày Sinh']}`);
@@ -416,7 +616,7 @@
                 .click(() => showMemberInfo(candidate));
 
             const img = $('<img>')
-                .attr('src', `https://www.appsheet.com/template/gettablefileurl?appName=Bầucử-612701497&tableName=UngCuVien&fileName=${candidate['Hình ảnh']}`)
+                .attr('src', `${candidate['Hình ảnh']}`)
                 .attr('alt', candidate['Họ Và Tên'])
                 .addClass('w-10 h-10 rounded-full mr-2 object-cover');
 
@@ -448,16 +648,16 @@
             const modal = $('#memberInfoModal');
             $('#memberInfoContent').html(`
             <div class="space-y-4">
-                <img src="https://www.appsheet.com/template/gettablefileurl?appName=Bầucử-612701497&tableName=UngCuVien&fileName=${candidate['Hình ảnh']}" 
+                <img src="${candidate['Hình ảnh']}" 
                      alt="${candidate['Họ Và Tên']}" class="w-32 h-32 object-cover rounded-full mx-auto">
                 <p class="text-xl font-bold text-center">${candidate['Họ Và Tên']}</p>
-                <p><strong>ID UCV:</strong> ${candidate.IUCV}</p>
+                <p><strong>ID UCV:</strong> ${candidate.IDUCV}</p>
                 <p><strong>Tên doanh nghiệp:</strong> ${candidate['Tên doanh nghiệp']}</p>
                 <p><strong>Chức vụ trong DN:</strong> ${candidate['Chức vụ trong DN']}</p>
                 <p><strong>Ngành nghề kinh doanh:</strong> ${candidate['Ngành nghề kinh doanh']}</p>
                 <p><strong>Chức vụ trong BIFA:</strong> ${candidate['Chức vụ trong BIFA']}</p>
                 <p><strong>Tiểu sử công tác:</strong> ${candidate['Tiểu sử công tác']}</p>
-                <p><strong>Thông tin cử viên:</strong> ${candidate['Thông tin cử viên']}</p>
+                <p><strong>Thông tin giới thiệu bản thân:</strong> ${candidate['Thông tin giới thiệu bản thân'] || "Không có"}</p>
             </div>
         `);
             modal.css('display', 'flex');
@@ -561,6 +761,9 @@
             }
         }
 
+        // Biến để theo dõi trạng thái hiển thị của controlPanel trên điện thoại
+        let isControlPanelVisible = false;
+
         // Event Listeners
         $(document).ready(() => {
             selectedCandidates = loadSelectedCandidates();
@@ -603,19 +806,21 @@
                 const candidateId = $(this).data('id');
                 if (selectedCandidates.includes(candidateId)) {
                     selectedCandidates = selectedCandidates.filter(id => id !== candidateId);
-                    $(this).text('Chọn').addClass('bg-blue-500').removeClass('bg-green-500');
+                    $(this).text('Chọn').removeClass('selected').addClass('bg-blue-500');
                 } else {
                     if (selectedCandidates.length >= MAX_VOTES) {
                         FuiToast.info(`Bạn đã chọn tối đa ${MAX_VOTES} ứng cử viên.`);
                         return;
                     }
                     selectedCandidates.push(candidateId);
-                    $(this).text('Đã chọn').addClass('bg-green-500').removeClass('bg-blue-500');
+                    $(this).text('Đã chọn').addClass('selected').removeClass('bg-blue-500');
                 }
                 saveSelectedCandidates();
                 updateConfirmButton();
                 updateSelectedCount();
             });
+
+
 
             // Modal close events
             $('.close, .modal-close').click(function () {
@@ -644,6 +849,35 @@
                     easing: 'easeOutElastic(1, .8)'
                 });
             });
+
+            // Thêm event listener mới cho nút toggle
+            $('#toggleControlPanel').click(() => {
+                const controlPanel = $('#controlPanel');
+
+                // Kiểm tra kích thước màn hình để chỉ ẩn/hiện trên điện thoại
+                if (window.innerWidth < 768) {
+                    isControlPanelVisible = !isControlPanelVisible;
+
+                    if (isControlPanelVisible) {
+                        controlPanel.css('display', 'block'); // Hiện controlPanel trên điện thoại
+                        $('#toggleControlPanel i').removeClass('fa-bars').addClass('fa-times');
+                    } else {
+                        controlPanel.css('display', 'none'); // Ẩn controlPanel trên điện thoại
+                        $('#toggleControlPanel i').removeClass('fa-times').addClass('fa-bars');
+                    }
+                }
+            });
+
+            // Xử lý khi thay đổi kích thước màn hình để đảm bảo controlPanel luôn hiển thị trên máy tính
+            $(window).resize(() => {
+                if (window.innerWidth >= 768) {
+                    $('#controlPanel').css('display', 'block'); // Hiện controlPanel trên máy tính
+                    isControlPanelVisible = true;
+                } else if (!isControlPanelVisible) {
+                    $('#controlPanel').css('display', 'none'); // Ẩn controlPanel trên điện thoại nếu chưa hiển thị
+                }
+            });
+
         });
     </script>
 </body>
