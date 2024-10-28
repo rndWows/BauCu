@@ -285,6 +285,76 @@
         #controlPanel {
             display: block;
         }
+
+        .btn-icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-icon:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Nền xám cho greeting message */
+        .greeting-container {
+            background-color: #e2e8f0;
+            color: #2d3748;
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            padding: 8px 16px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Nút "X" để thu nhỏ greeting message */
+        .close-btn {
+            background: none;
+            border: none;
+            color: #2d3748;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s ease;
+        }
+
+        .close-btn:hover {
+            color: #e53e3e;
+        }
+
+        /* Khi greeting message thu nhỏ lại */
+        .greeting-container.minimized {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            padding: 0;
+            justify-content: center;
+            font-size: 0;
+            /* Ẩn văn bản */
+        }
+
+        /* Ẩn dòng chào mừng khi thu nhỏ và hiển thị icon user */
+        .greeting-container.minimized #greetingMessage {
+            display: none;
+        }
+
+        .greeting-container.minimized #userIcon {
+            display: inline;
+            /* Hiển thị icon user */
+            font-size: 20px;
+            color: #2d3748;
+        }
     </style>
 </head>
 
@@ -322,21 +392,37 @@
     <div id="fui-toast"></div>
 
     <!-- Member Info Modal -->
-    <div class="InfoModal fixed bottom-4 right-4 z-50 flex flex-col gap-2">
-        <button id="confirmVoteButton"
-            class="bg-blue-500 hover:bg-blue-600 text-white rounded-full p-3 shadow-lg transition duration-300 ease-in-out">
+    <div class="InfoModal fixed bottom-4 right-4 z-50 flex flex-col items-end gap-3">
+        <!-- Greeting message với nền xám và nút "X" để thu nhỏ -->
+        <div id="greetingContainer"
+            class="greeting-container flex items-center bg-gray-300 text-gray-700 font-semibold rounded-full px-4 py-2 mb-2 relative">
+            <span id="greetingMessage">Xin chào, Ninh Văn Phước</span>
+            <button id="closeGreetingButton" class="close-btn ml-2">
+                <i class="fas fa-times"></i>
+            </button>
+            <i id="userIcon" class="fas fa-user hidden"></i> <!-- Icon user khi thu nhỏ -->
+        </div>
+
+        <!-- Các nút bầu cử và làm mới -->
+        <button id="confirmVoteButton" class="btn-icon bg-blue-500 hover:bg-blue-600 text-white">
             <i class="fas fa-paper-plane"></i>
         </button>
-        <button id="selectedCountButton"
-            class="bg-blue-500 hover:bg-blue-600 text-white rounded-full p-3 shadow-lg transition duration-300 ease-in-out">
+        <button id="selectedCountButton" class="btn-icon bg-blue-500 hover:bg-blue-600 text-white">
             <span id="selectedCountText" class="text-sm font-medium">0</span>
         </button>
-
-        <button id="refreshButton"
-            class="bg-blue-500 hover:bg-blue-600 text-white rounded-full p-3 shadow-lg transition duration-300 ease-in-out">
+        <button id="refreshButton" class="btn-icon bg-blue-500 hover:bg-blue-600 text-white">
             <i class="fas fa-sync-alt"></i>
         </button>
+
+        <!-- Nút đăng xuất -->
+        <button id="logoutButton" class="btn-icon bg-red-500 hover:bg-red-600 text-white">
+            <i class="fas fa-sign-out-alt"></i>
+        </button>
     </div>
+
+
+
+
 
     <main class="container mx-auto px-4">
         <div id="controlPanel"
@@ -402,7 +488,7 @@
         const appId = 'd457dee0-9328-402a-af94-cd3358dbad1c';
         const accessKey = 'V2-MHoFx-64XnM-FJO7E-521rK-jB06n-cU7bN-oq6bW-KNMRV';
         const region = 'www';
-        const MIN_VOTES = 25;
+        const MIN_VOTES = 5;
         const MAX_VOTES = 27;
 
         // Global variables
@@ -532,47 +618,36 @@
                 localStorage.setItem('loginToken', 'token-' + Date.now());
             }
 
-            // Xóa các UI elements cũ nếu có
-            $('.InfoModal .flex .text-sm').remove();
-            $('.InfoModal .flex button.bg-red-500').remove();
+            // Cập nhật tên người dùng vào thẻ greetingMessage
+            $('#greetingMessage').text(`Xin chào, ${user['Họ Và Tên']}`);
 
-            // Thêm UI elements mới
-            const userInfo = $('<div>')
-                .addClass('text-sm text-gray-600 mr-4')
-                .text(`Xin chào, ${user['Họ Và Tên']}`);
-
-            const logoutBtn = $('<button>')
-                .addClass('bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-full text-sm')
-                .text('Đăng xuất')
-                .click(handleLogout);
-
-            // Thêm vào vị trí cuối của flex container trong InfoModal
-            $('.InfoModal .flex:first').append(userInfo, logoutBtn);
-
-
+            // Hiện nội dung và ẩn modal đăng nhập
             hideLoginModal();
             FuiToast.success('Đăng nhập thành công');
             loadData();
         }
 
+
         // Hàm xử lý đăng xuất
         function handleLogout() {
+            // Xóa thông tin đăng nhập khỏi localStorage
             localStorage.removeItem('username');
             localStorage.removeItem('loginToken');
             currentUser = null;
             selectedCandidates = [];
             saveSelectedCandidates();
 
-
-            // Reset UI
+            // Reset giao diện người dùng
             $('main').hide();
             $('#loginUsername').val('');
             $('#loginPassword').val('');
             $('#rememberLogin').prop('checked', false);
 
+            // Hiển thị lại modal đăng nhập
             showLoginModal();
             FuiToast.info('Đã đăng xuất');
         }
+
 
         // Hàm tự động đăng nhập
         async function autoLogin(username, token) {
@@ -923,6 +998,19 @@
             }
         }
 
+        document.getElementById('closeGreetingButton').addEventListener('click', function () {
+            const greetingContainer = document.getElementById('greetingContainer');
+            greetingContainer.classList.toggle('minimized');
+
+            const userIcon = document.getElementById('userIcon');
+            if (greetingContainer.classList.contains('minimized')) {
+                userIcon.classList.remove('hidden'); // Hiển thị icon user
+            } else {
+                userIcon.classList.add('hidden'); // Ẩn icon user
+            }
+        });
+
+
 
         // Event Listeners
         $(document).ready(() => {
@@ -939,6 +1027,9 @@
             $('#loginPassword').keypress((e) => {
                 if (e.which === 13) handleLogin();
             });
+
+            // Sự kiện cho nút Đăng xuất trong InfoModal
+            $('#logoutButton').click(handleLogout);
 
             // Event listeners cho search và filter
             $('#searchForm').on('submit', (e) => {
