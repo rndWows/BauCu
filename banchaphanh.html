@@ -287,6 +287,12 @@
             display: block;
         }
 
+        #controlPanel.collapsed .search-sort-container,
+        #controlPanel.collapsed .voting-buttons,
+        #controlPanel.collapsed .pagination-container {
+            display: none;
+        }
+
         @media (max-width: 768px) {
             #controlPanel {
                 display: none;
@@ -312,51 +318,34 @@
     </div>
 
     <main class="container mx-auto px-4 py-8">
-        <div id="controlPanel"
-            class="control-panel bg-white rounded-lg shadow-md p-6 mb-8 sticky top-0 z-40 transform transition-transform duration-300 ease-in-out md:translate-y-0">
-            <div class="flex flex-col lg:flex-row items-center justify-between gap-4">
-                <div class="flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto">
-                    <div class="flex items-center gap-4">
-                        <img src="https://www.bifa.vn/Data/Sites/1/skins/default/favicon.ico" alt="Bầu cử Ban chấp hành"
-                            class="h-10 w-10">
-                        <h1 class="text-2xl font-bold whitespace-nowrap">Bầu cử Ban chấp hành</h1>
-                    </div>
-
-                    <div class="search-sort-container w-full sm:w-64">
-                        <form id="searchForm" class="w-full">
-                            <input type="text" id="searchInput"
-                                class="w-full px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                placeholder="Tìm kiếm theo tên ứng viên">
-                        </form>
-                    </div>
+        <div id="controlPanel" class="control-panel bg-white rounded-lg shadow-md p-6 mb-8 sticky top-0 z-40">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <img src="https://www.bifa.vn/Data/Sites/1/skins/default/favicon.ico" alt="Logo" class="h-10 w-10">
+                    <h1 class="text-2xl font-bold whitespace-nowrap">Bầu cử Ban chấp hành</h1>
                 </div>
-                <div class="flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto">
-                    <div class="voting-buttons flex gap-2 w-full sm:w-auto">
-                        <button id="confirmVoteButton"
-                            class="w-full sm:w-auto bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:-translate-y-1">
-                            Xác nhận
-                        </button>
-                        <button id="selectedCountButton"
-                            class="w-full sm:w-auto bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:-translate-y-1">
-                            Đã chọn 0 UCV
-                        </button>
-                    </div>
-                    <div
-                        class="pagination-container flex items-center gap-2 w-full sm:w-auto justify-center sm:justify-end">
-                        <button id="prevPage"
-                            class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out">
-                            <i class="fas fa-chevron-left"></i>
-                        </button>
-                        <span id="pageInfo" class="text-gray-600"></span>
-                        <button id="nextPage"
-                            class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out">
-                            <i class="fas fa-chevron-right"></i>
-                        </button>
-                        <button id="refreshButton"
-                            class="bg-blue-500 hover:bg-blue-600 text-white font-bold p-2 rounded-full transition duration-300 ease-in-out">
-                            <i class="fas fa-sync-alt"></i>
-                        </button>
-                    </div>
+                <div class="search-sort-container w-full sm:w-64">
+                    <form id="searchForm">
+                        <input type="text" id="searchInput" class="w-full px-4 py-2 rounded-full border border-gray-300"
+                            placeholder="Tìm kiếm theo tên ứng viên">
+                    </form>
+                </div>
+                <div class="voting-buttons flex gap-2">
+                    <button id="confirmVoteButton" class="bg-green-500 text-white font-bold py-2 px-4 rounded-full">
+                        Xác nhận
+                    </button>
+                    <button id="selectedCountButton" class="bg-blue-500 text-white font-bold py-2 px-4 rounded-full">
+                        Đã chọn 0 UCV
+                    </button>
+                </div>
+                <div class="pagination-container flex items-center gap-2">
+                    <button id="prevPage" class="bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-full">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <span id="pageInfo" class="text-gray-600">Trang 1 / 10</span>
+                    <button id="nextPage" class="bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-full">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
                 </div>
             </div>
         </div>
@@ -394,7 +383,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
             </div>
-            <h2 class="text-2xl font-bold mb-4">Thông tin hội viên</h2>
+            <h2 class="text-2xl font-bold mb-4 text-center">Thông tin hội viên</h2>
             <div id="memberInfoContent"></div>
         </div>
     </div>
@@ -457,8 +446,9 @@
             showLoading();
             resetPage();  // Add this line
             Promise.all([
-                apiRequest('UngCuVien', 'Find', { Rows: [], Properties: { Selector: 'Filter(UngCuVien, true)' } }),
+                apiRequest('UngCuVien', 'Find', { Rows: [], Properties: { Selector: "Filter(UngCuVien, [Trạng thái]='Đã duyệt')" } }),
                 apiRequest('PhieuBau', 'Find', { Rows: [], Properties: { Selector: 'Filter(PhieuBau, true)' } })
+
             ]).then(([candidates, votes]) => {
                 processCandidatesAndVotes(candidates, votes);
                 hideLoading();
@@ -649,7 +639,7 @@
             $('#memberInfoContent').html(`
             <div class="space-y-4">
                 <img src="${candidate['Hình ảnh']}" 
-                     alt="${candidate['Họ Và Tên']}" class="w-32 h-32 object-cover rounded-full mx-auto">
+                     alt="${candidate['Họ Và Tên']}" class="w-56 rounded-full mx-auto">
                 <p class="text-xl font-bold text-center">${candidate['Họ Và Tên']}</p>
                 <p><strong>ID UCV:</strong> ${candidate.IDUCV}</p>
                 <p><strong>Tên doanh nghiệp:</strong> ${candidate['Tên doanh nghiệp']}</p>
@@ -762,7 +752,7 @@
         }
 
         // Biến để theo dõi trạng thái hiển thị của controlPanel trên điện thoại
-        let isControlPanelVisible = false;
+        let isControlPanelVisible = true;
 
         // Event Listeners
         $(document).ready(() => {
@@ -852,32 +842,23 @@
 
             // Thêm event listener mới cho nút toggle
             $('#toggleControlPanel').click(() => {
-                const controlPanel = $('#controlPanel');
+                $('#controlPanel').toggleClass('collapsed');
+                isControlPanelVisible = !isControlPanelVisible;
 
-                // Kiểm tra kích thước màn hình để chỉ ẩn/hiện trên điện thoại
-                if (window.innerWidth < 768) {
-                    isControlPanelVisible = !isControlPanelVisible;
-
-                    if (isControlPanelVisible) {
-                        controlPanel.css('display', 'block'); // Hiện controlPanel trên điện thoại
-                        $('#toggleControlPanel i').removeClass('fa-bars').addClass('fa-times');
-                    } else {
-                        controlPanel.css('display', 'none'); // Ẩn controlPanel trên điện thoại
-                        $('#toggleControlPanel i').removeClass('fa-times').addClass('fa-bars');
-                    }
-                }
+                // Đổi biểu tượng khi bật/tắt
+                $('#toggleControlPanel i').toggleClass('fa-bars fa-times');
             });
 
-            // Xử lý khi thay đổi kích thước màn hình để đảm bảo controlPanel luôn hiển thị trên máy tính
+            // Đảm bảo hiển thị toàn bộ khi trên màn hình lớn
             $(window).resize(() => {
                 if (window.innerWidth >= 768) {
-                    $('#controlPanel').css('display', 'block'); // Hiện controlPanel trên máy tính
+                    $('#controlPanel').removeClass('collapsed');
                     isControlPanelVisible = true;
+                    $('#toggleControlPanel i').removeClass('fa-times').addClass('fa-bars');
                 } else if (!isControlPanelVisible) {
-                    $('#controlPanel').css('display', 'none'); // Ẩn controlPanel trên điện thoại nếu chưa hiển thị
+                    $('#controlPanel').addClass('collapsed');
                 }
             });
-
         });
     </script>
 </body>
