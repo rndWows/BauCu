@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi" class="bg-gray-100">
+<html lang="vi" class="bg-gradient-to-br from-blue-50 to-indigo-50">
 
 <head>
     <meta charset="UTF-8">
@@ -12,9 +12,141 @@
     <script
         src="https://cdn.jsdelivr.net/gh/lelinh014756/fui-toast-js@master/assets/js/toast@1.0.1/fuiToast.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        * {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f0f4ff 0%, #e6f0ff 100%);
+            min-height: 100vh;
+        }
+
+        /* Header Styles */
+        .header-container {
+            background: rgba(255, 255, 255, 0.9);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* Search Input Styles */
+        .search-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 6px 10px;
+            padding-left: 45px;
+            border-radius: 12px;
+            border: 2px solid #e2e8f0;
+            background: white;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            color: #1a202c;
+        }
+
+        .search-input:focus {
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+            outline: none;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #718096;
+        }
+
+        /* Card Styles */
+        .candidate-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .candidate-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .candidate-image {
+            width: 100%;
+            height: 300px;
+            object-fit: contain;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .candidate-info {
+            padding: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .candidate-name {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1a202c;
+            margin-bottom: 0.75rem;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            color: #4a5568;
+        }
+
+        .info-icon {
+            width: 20px;
+            margin-right: 0.75rem;
+            color: #4f46e5;
+        }
+
+        /* Button Styles */
+        .action-button {
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.875rem;
+        }
+
+        .primary-button {
+            background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+
+        .primary-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(79, 70, 229, 0.4);
+        }
+
+        .secondary-button {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .secondary-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(16, 185, 129, 0.4);
+        }
+
+        /* Modal Styles */
         .modal {
             display: none;
             position: fixed;
@@ -23,74 +155,141 @@
             top: 0;
             width: 100%;
             height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.4);
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        #memberInfoContent {
+            white-space: pre-line;
+            /* Giữ khoảng trắng và xuống dòng trong văn bản */
+            font-size: 1rem;
+            color: #4a5568;
+            line-height: 1.6;
+            margin-bottom: 1rem;
         }
 
         .modal-content {
-            background-color: #fefefe;
-            margin: 15% auto;
-            padding: 20px;
-            border-radius: 8px;
-            width: 90%;
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            width: 100%;
+            margin: 0 auto;
             max-width: 500px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: color 0.3s ease;
-        }
-
-        .close:hover {
-            color: #000;
-        }
-
-        #memberInfoModal {
-            display: none;
-        }
-
-        .modal-mask {
-            position: fixed;
-            inset: 0;
-            background-color: rgba(0, 0, 0, 0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-
-        .modal-dialog {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            max-width: 600px;
-            width: 90%;
-            max-height: calc(100vh - 100px);
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            max-height: 100%;
+            /* Giới hạn chiều cao modal */
             overflow-y: auto;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            /* Thêm cuộn dọc */
         }
 
-        #cardContainer {
-            min-height: 400px;
+        /* Optional: Style scrollbar for a better appearance */
+        .modal-content::-webkit-scrollbar {
+            width: 8px;
         }
 
-        .candidate-card {
-            transition: all 0.3s ease-in-out;
+        .modal-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
         }
 
+        .modal-content::-webkit-scrollbar-thumb {
+            background-color: #c1c1c1;
+            border-radius: 4px;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                transform: translateY(-30px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1a202c;
+        }
+
+        .close-button {
+            font-size: 1.5rem;
+            color: #718096;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .close-button:hover {
+            color: #1a202c;
+            transform: rotate(90deg);
+        }
+
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #1a202c;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        #selectedCandidatesList {
+            padding: 0;
+            list-style: none;
+        }
+
+        #selectedCandidatesList li {
+            font-size: 1rem;
+            color: #4a5568;
+            margin: 0.5rem 0;
+            padding: 10px;
+            border-radius: 8px;
+            background: #f7fafc;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        #selectedCandidatesList li:hover {
+            background: #ebf4ff;
+        }
+
+        .close-button {
+            font-size: 2.5rem;
+            color: #718096;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        .close-button:hover {
+            color: #1a202c;
+            transform: rotate(90deg);
+        }
+
+
+        /* Loading Overlay */
         #loadingOverlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(255, 255, 255, 0.8);
-            display: flex;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(5px);
+            display: none;
             justify-content: center;
             align-items: center;
             z-index: 9999;
@@ -99,10 +298,14 @@
         .spinner {
             width: 50px;
             height: 50px;
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #3498db;
+            border: 3px solid #e2e8f0;
+            border-top: 3px solid #4f46e5;
             border-radius: 50%;
             animation: spin 1s linear infinite;
+        }
+
+        .no-scroll {
+            overflow: hidden;
         }
 
         @keyframes spin {
@@ -115,398 +318,232 @@
             }
         }
 
-        /* Nút màu xanh (Chọn, Đã chọn, Làm mới) */
-        button.bg-blue-500 {
-            background-color: #007bff;
+        /* Floating Action Buttons */
+        .floating-actions {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            z-index: 50;
+        }
+
+        .floating-button {
+            width: 56px;
+            height: 56px;
+            border-radius: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
             color: white;
-            border: none;
-            border-radius: 30px;
-            font-size: 14px;
-            padding: 8px 16px;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
             transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
-        }
-
-        button.bg-blue-500:hover {
-            background-color: #0056b3;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 123, 255, 0.4);
-        }
-
-        /* Nút màu xanh lá (Xác nhận, Xem thông tin) */
-        button.bg-green-500 {
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 30px;
-            font-size: 14px;
-            padding: 10px 20px;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
-        }
-
-        button.bg-green-500:hover {
-            background-color: #218838;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(40, 167, 69, 0.4);
-        }
-
-        /* Nút phân trang (Trái, Phải) */
-        button.bg-gray-200 {
-            background-color: #e2e6ea;
-            color: #495057;
-            border: none;
-            border-radius: 30px;
-            font-size: 14px;
-            padding: 10px 20px;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(108, 117, 125, 0.2);
-        }
-
-        button.bg-gray-200:hover {
-            background-color: #ced4da;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(108, 117, 125, 0.3);
-        }
-
-        /* Hiệu ứng khi bấm vào nút */
-        button:active {
-            transform: translateY(2px);
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Thẻ ứng cử viên */
-        .candidate-card {
-            background-color: white;
-            border-radius: 15px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .candidate-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-        }
-
-        /* Hình ảnh ứng cử viên */
-        .candidate-card img {
-            border-top-left-radius: 15px;
-            border-top-right-radius: 15px;
-            object-fit: contain;
-            height: 300px;
-            width: 100%;
-        }
-
-        /* Nội dung thẻ */
-        .candidate-card .p-4 {
-            padding: 20px;
-            font-family: 'Roboto', sans-serif;
-            color: #333;
-        }
-
-        /* Tiêu đề và tên ứng cử viên */
-        .candidate-card h2 {
-            font-size: 22px;
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #2c3e50;
-            text-align: center;
-        }
-
-        /* Thông tin ứng cử viên */
-        .candidate-card p {
-            margin-bottom: 8px;
-            color: #555;
-            font-size: 14px;
-            line-height: 1.5;
-        }
-
-        /* Icon và văn bản trong thẻ */
-        .candidate-card p i {
-            margin-right: 8px;
-            color: #3498db;
-        }
-
-        /* Các nút chọn và xem thông tin */
-        .candidate-card .select-btn,
-        .candidate-card .view-info-btn {
-            padding: 8px 12px;
-            border-radius: 30px;
-            font-size: 14px;
-            font-weight: bold;
-            text-align: center;
             cursor: pointer;
-            transition: all 0.3s ease;
         }
 
-        .candidate-card .select-btn {
-            background-color: #007bff;
-            /* Màu xanh dương */
-            color: white;
-            border: none;
-            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
-        }
-
-        .candidate-card .select-btn:hover {
-            background-color: #0056b3;
-            /* Xanh dương đậm khi hover */
+        .floating-button:hover {
             transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(79, 70, 229, 0.4);
         }
 
-
-        .candidate-card .select-btn.selected {
-            background-color: #28a745;
-            /* Màu xanh lá */
-            color: white;
-            border: none;
-            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.2);
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
         }
 
-        .candidate-card .select-btn.selected:hover {
-            background-color: #218838;
-            /* Xanh lá đậm khi hover */
-            transform: translateY(-3px);
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
         }
 
-        .candidate-card .view-info-btn {
-            background-color: #ced4da;
-            color: #495057;
-            border: none;
-            box-shadow: 0 5px 15px rgba(108, 117, 125, 0.2);
+        ::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 4px;
         }
 
-        .candidate-card .view-info-btn:hover {
-            background-color: #ced4da;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(108, 117, 125, 0.3);
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
         }
 
-        #controlPanel {
-            display: block;
-        }
+        /* Responsive Design */
+        @media (max-width: 640px) {
+            .candidate-card {
+                margin-bottom: 1rem;
+            }
 
-        .btn-icon {
-            width: 48px;
-            height: 48px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            font-size: 20px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
+            .modal-content {
+                width: 95%;
+                margin: 5% auto;
+            }
 
-        .btn-icon:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-        }
+            .floating-actions {
+                bottom: 1rem;
+                right: 1rem;
+            }
 
-        /* Nền xám cho greeting message */
-        .greeting-container {
-            background-color: #e2e8f0;
-            color: #2d3748;
-            border-radius: 24px;
-            display: flex;
-            align-items: center;
-            padding: 8px 16px;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Nút "X" để thu nhỏ greeting message */
-        .close-btn {
-            background: none;
-            border: none;
-            color: #2d3748;
-            font-size: 16px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: color 0.2s ease;
-        }
-
-        .close-btn:hover {
-            color: #e53e3e;
-        }
-
-        /* Khi greeting message thu nhỏ lại */
-        .greeting-container.minimized {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            padding: 0;
-            justify-content: center;
-            font-size: 0;
-            /* Ẩn văn bản */
-        }
-
-        /* Ẩn dòng chào mừng khi thu nhỏ và hiển thị icon user */
-        .greeting-container.minimized #greetingMessage {
-            display: none;
-        }
-
-        .greeting-container.minimized #userIcon {
-            display: inline;
-            /* Hiển thị icon user */
-            font-size: 20px;
-            color: #2d3748;
+            .floating-button {
+                width: 48px;
+                height: 48px;
+            }
         }
     </style>
 </head>
 
-<body class="font-sans">
-    <div id="loadingOverlay" class="hidden">
+<body class="min-h-screen">
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay">
         <div class="spinner"></div>
-    </div>
-
-
-    <!-- Login Modal -->
-    <div id="loginModal" class="modal">
-        <div class="modal-content">
-            <h2 class="text-2xl font-bold mb-4 text-center">Đăng Nhập</h2>
-            <div class="mb-4">
-                <label for="loginUsername" class="block text-sm font-medium text-gray-700 mb-1">Tên đăng nhập</label>
-                <input type="text" id="loginUsername"
-                    class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-            </div>
-            <div class="mb-4">
-                <label for="loginPassword" class="block text-sm font-medium text-gray-700 mb-1">Mật khẩu</label>
-                <input type="password" id="loginPassword"
-                    class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-            </div>
-            <div class="mb-4 flex items-center">
-                <input type="checkbox" id="rememberLogin" class="mr-2">
-                <label for="rememberLogin" class="text-sm text-gray-600">Ghi nhớ đăng nhập</label>
-            </div>
-            <button id="loginButton"
-                class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out">
-                Đăng nhập
-            </button>
-        </div>
     </div>
 
     <div id="fui-toast"></div>
 
-    <!-- Member Info Modal -->
-    <div class="InfoModal fixed bottom-4 right-4 z-50 flex flex-col items-end gap-3">
-        <!-- Greeting message với nền xám và nút "X" để thu nhỏ -->
-        <div id="greetingContainer"
-            class="greeting-container flex items-center bg-gray-300 text-gray-700 font-semibold rounded-full px-4 py-2 mb-2 relative">
-            <span id="greetingMessage">Xin chào, Ninh Văn Phước</span>
-            <button id="closeGreetingButton" class="close-btn ml-2">
-                <i class="fas fa-times"></i>
-            </button>
-            <i id="userIcon" class="fas fa-user hidden"></i> <!-- Icon user khi thu nhỏ -->
-        </div>
-
-        <!-- Các nút bầu cử và làm mới -->
-        <button id="confirmVoteButton" class="btn-icon bg-blue-500 hover:bg-blue-600 text-white">
+    <!-- Floating Action Buttons -->
+    <div class="floating-actions">
+        <button id="confirmVoteButton" class="floating-button">
             <i class="fas fa-paper-plane"></i>
         </button>
-        <button id="selectedCountButton" class="btn-icon bg-blue-500 hover:bg-blue-600 text-white">
+        <button id="selectedCountButton" class="floating-button">
             <span id="selectedCountText" class="text-sm font-medium">0</span>
         </button>
-        <button id="refreshButton" class="btn-icon bg-blue-500 hover:bg-blue-600 text-white">
+        <button id="refreshButton" class="floating-button">
             <i class="fas fa-sync-alt"></i>
-        </button>
-
-        <!-- Nút đăng xuất -->
-        <button id="logoutButton" class="btn-icon bg-red-500 hover:bg-red-600 text-white">
-            <i class="fas fa-sign-out-alt"></i>
         </button>
     </div>
 
-
-
-
-
-    <main class="container mx-auto px-4">
-        <div id="controlPanel"
-            class="control-panel bg-white rounded-lg shadow-md p-6 mb-8 sticky top-0 z-40 transform transition-transform duration-300 ease-in-out md:translate-y-0">
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="header-container sticky top-0 z-40 mb-8 rounded-xl p-6">
             <div class="flex flex-col lg:flex-row items-center justify-between gap-4">
-                <div class="flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto">
-                    <div class="flex items-center gap-4">
-                        <img src="https://www.bifa.vn/Data/Sites/1/skins/default/favicon.ico" alt="Bầu cử Ban chấp hành"
-                            class="h-8 w-8">
-                        <h1 class="text-2xl font-bold whitespace-nowrap">Bầu cử Ban chấp hành</h1>
-                    </div>
-
-                    <div class="search-sort-container w-full sm:w-64">
-                        <form id="searchForm" class="w-full">
-                            <input type="text" id="searchInput"
-                                class="w-full px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                placeholder="Tìm kiếm ứng viên">
-                        </form>
-                    </div>
+                <div class="flex items-center gap-4">
+                    <img src="https://www.bifa.vn/Data/Sites/1/skins/default/favicon.ico" alt="Logo" class="h-10 w-10">
+                    <h1 class="text-2xl font-bold text-gray-900">Ban chấp hành</h1>
+                </div>
+                <div class="search-container">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" id="searchInput" class="search-input" placeholder="Tìm kiếm ứng viên...">
                 </div>
             </div>
         </div>
 
-        <div id="cardContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+        <!-- Card Grid -->
+        <div id="cardContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        </div>
     </main>
 
+    <!-- Selected Candidates Modal -->
     <div id="selectedCandidatesModal" class="modal">
         <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2 class="text-2xl font-bold mb-4 text-center">Ứng cử viên đã chọn</h2>
+            <div class="modal-header">
+                <h2 class="modal-title">Ứng cử viên đã chọn</h2>
+                <span class="close-button">&times;</span>
+            </div>
             <ul id="selectedCandidatesList" class="space-y-2"></ul>
         </div>
     </div>
 
+    <!-- Vote Modal -->
     <div id="voteModal" class="modal">
         <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2 class="text-2xl font-bold mb-4">Xác nhận bầu cử</h2>
-            <p id="selectedCountText"></p>
-            <button id="submitVoteButton"
-                class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out">
-                <i class="fas fa-check mr-2"></i> Xác nhận bầu cử
-            </button>
+            <div class="modal-header">
+                <h2 class="modal-title">Xác nhận bầu cử</h2>
+                <span class="close-button">&times;</span>
+            </div>
+            <div class="p-4">
+                <div class="mb-4">
+                    <label for="voterIdInput" class="block text-sm font-medium text-gray-700 mb-2">
+                        ID Cử tri
+                    </label>
+                    <input type="text" id="voterIdInput" class="search-input" placeholder="Nhập ID cử tri của bạn">
+                </div>
+                <button id="submitVoteButton" class="action-button primary-button w-full">
+                    <i class="fas fa-check mr-2"></i>Xác nhận bầu cử
+                </button>
+            </div>
         </div>
     </div>
 
-    <div id="memberInfoModal" class="modal-mask">
-        <div class="modal-dialog">
-            <div class="modal-close absolute top-2 right-2 cursor-pointer">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
+    <!-- Member Info Modal -->
+    <div id="memberInfoModal" class="modal">
+        <div class="modal-content w-full max-w-2xl">
+            <div class="modal-header">
+                <h2 class="modal-title">Thông tin chi tiết</h2>
+                <span class="close-button">&times;</span>
             </div>
-            <h2 class="text-2xl font-bold mb-4 text-center">Thông tin hội viên</h2>
-            <div id="memberInfoContent"></div>
+            <div id="memberInfoContent" class="p-4"></div>
         </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+
     <script>
-        // Constants
+        function createCandidateCard(candidate) {
+            return `
+                <div class="candidate-card">
+                    <img src="${candidate['Hình ảnh']}" 
+                         alt="${candidate['Họ Và Tên']}" 
+                         class="candidate-image">
+                    <div class="candidate-info">
+                        <h2 class="candidate-name">${candidate['Họ Và Tên']}</h2>
+                        <div class="info-item">
+                            <i class="fas fa-id-card info-icon"></i>
+                            <span>ID UCV: ${candidate.IDUCV}</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-building info-icon"></i>
+                            <span>DN: ${candidate['Tên doanh nghiệp']}</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-user-tie info-icon"></i>
+                            <span>Chức vụ DN: ${candidate['Chức vụ trong DN']}</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-briefcase info-icon"></i>
+                            <span>Chức vụ BIFA: ${candidate['Chức vụ trong BIFA']}</span>
+                        </div>
+                    </div>
+                    <div class="p-4 bg-gray-50 border-t border-gray-100">
+                        <div class="grid grid-cols-2 gap-3">
+                            <button class="select-btn action-button primary-button" data-id="${candidate.IDUCV}">
+                                Chọn
+                            </button>
+                            <button class="view-info-btn action-button secondary-button">
+                                <i class="fas fa-info-circle mr-1"></i>Chi tiết
+                            </button>
+                        </div>
+                    </div>
+                </div>`;
+        }
+
+        // Constants and Variables
         const appId = 'd457dee0-9328-402a-af94-cd3358dbad1c';
         const accessKey = 'V2-MHoFx-64XnM-FJO7E-521rK-jB06n-cU7bN-oq6bW-KNMRV';
         const region = 'www';
         const MIN_VOTES = 5;
         const MAX_VOTES = 27;
 
-        // Global variables
         let allCandidates = [];
         let selectedCandidates = [];
         let currentFilteredCandidates = [];
+        let isLoading = false;
+        let dataCache = null;
+        let lastLoadTime = 0;
+        const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
-        // Functions for localStorage management
-        function saveSelectedCandidates() {
-            localStorage.setItem('selectedCandidates', JSON.stringify(selectedCandidates));
+        // Loading Management
+        function showLoading() {
+            $('#loadingOverlay').css('display', 'flex'); // Chỉ hiện overlay mà không dùng hiệu ứng
+            isLoading = true;
         }
 
-        function loadSelectedCandidates() {
-            const saved = localStorage.getItem('selectedCandidates');
-            return saved ? JSON.parse(saved) : [];
+        function hideLoading() {
+            $('#loadingOverlay').css('display', 'none'); // Tắt overlay không cần hiệu ứng
+            isLoading = false;
         }
 
-        // API and Data Management
+        // API Functions
         function apiRequest(tableName, action, data) {
             const apiUrl = `https://${region}.appsheet.com/api/v2/apps/${appId}/tables/${tableName}/Action`;
             return $.ajax({
@@ -527,580 +564,439 @@
             });
         }
 
+        // Data Management
+        async function loadData(forceReload = false) {
+            const now = Date.now();
 
-
-        // Thêm vào phần đầu với các constants
-        const usersTableName = 'CuTri'; // Tên bảng chứa thông tin người dùng
-
-        // Thêm biến để theo dõi trạng thái đăng nhập
-        let currentUser = null;
-
-        // Hàm kiểm tra đăng nhập
-        function checkLoginStatus() {
-            const savedUsername = localStorage.getItem('username');
-            const savedToken = localStorage.getItem('loginToken');
-
-            if (savedUsername && savedToken) {
-                // Nếu đã có thông tin đăng nhập thì gọi autoLogin 1 lần
-                autoLogin(savedUsername, savedToken);
-            } else {
-                // Nếu chưa có thông tin thì hiển thị form đăng nhập
-                hideLoading(); // Ẩn loading nếu đang hiển thị
-                showLoginModal();
-            }
-        }
-
-        // Hàm hiển thị modal đăng nhập
-        function showLoginModal() {
-            $('#loginModal').show();
-            // Ẩn nội dung chính
-            $('main').hide();
-        }
-
-        // Hàm ẩn modal đăng nhập
-        function hideLoginModal() {
-            $('#loginModal').hide();
-            // Hiện nội dung chính
-            $('main').show();
-        }
-
-        // Hàm xử lý đăng nhập
-        async function handleLogin() {
-            const username = $('#loginUsername').val();
-            const password = $('#loginPassword').val();
-            const rememberMe = $('#rememberLogin').is(':checked');
-
-            if (!username || !password) {
-                FuiToast.info('Vui lòng nhập đầy đủ thông tin đăng nhập');
+            if (!forceReload && dataCache && (now - lastLoadTime < CACHE_DURATION)) {
+                processCandidatesAndVotes(dataCache.candidates, dataCache.votes);
                 return;
             }
+
+            if (isLoading) return;
 
             showLoading();
 
             try {
-                const result = await apiRequest('CuTri', 'Find', {
-                    Properties: {
-                        Selector: `Filter(CuTri, and([username] = "${username}", [password] = "${password}"))`
-                    }
-                });
+                const [candidates, votes] = await Promise.all([
+                    apiRequest('UngCuVien', 'Find', {
+                        Properties: {
+                            Selector: 'Filter(UngCuVien, [Trạng thái]="Đã duyệt")'
+                        }
+                    }),
+                    apiRequest('PhieuBau', 'Find', {
+                        Properties: {
+                            Selector: 'Filter(PhieuBau, true)'
+                        }
+                    })
+                ]);
 
-                if (result && Array.isArray(result) && result.length === 1) {
-                    const user = result[0];
-                    handleSuccessfulLogin(user, rememberMe);
-                } else {
-                    FuiToast.error('Tên đăng nhập hoặc mật khẩu không đúng');
+                if (!candidates || candidates.length === 0) {
+                    FuiToast.error('Không có dữ liệu ứng cử viên');
+                    return;
                 }
-            } catch (error) {
-                console.error('Login error:', error);
-                FuiToast.error('Đã có lỗi xảy ra khi đăng nhập');
-            } finally {
-                hideLoading();
-            }
-        }
 
-        // Hàm xử lý khi đăng nhập thành công
-        function handleSuccessfulLogin(user, rememberMe) {
-            if (user['Trạng Thái PB Ban Chấp Hành'] === 'Đã bầu cử') {
-                FuiToast.info('Bạn đã hoàn thành bầu cử');
-                return;
-            }
-
-            if (user['Tình trạng cử tri'] !== 'Hợp lệ') {
-                FuiToast.error('Tài khoản không được phép truy cập');
-                handleLogout();
-                return;
-            }
-
-            currentUser = user;
-
-            if (rememberMe) {
-                localStorage.setItem('username', user.IDCT);
-                localStorage.setItem('loginToken', 'token-' + Date.now());
-            }
-
-            // Cập nhật tên người dùng vào thẻ greetingMessage
-            $('#greetingMessage').text(`Xin chào, ${user['Họ Và Tên']}`);
-
-            // Hiện nội dung và ẩn modal đăng nhập
-            hideLoginModal();
-            FuiToast.success('Đăng nhập thành công');
-            loadData();
-        }
-
-
-        // Hàm xử lý đăng xuất
-        function handleLogout() {
-            // Xóa thông tin đăng nhập khỏi localStorage
-            localStorage.removeItem('username');
-            localStorage.removeItem('loginToken');
-            currentUser = null;
-            selectedCandidates = [];
-            saveSelectedCandidates();
-
-            // Reset giao diện người dùng
-            $('main').hide();
-            $('#loginUsername').val('');
-            $('#loginPassword').val('');
-            $('#rememberLogin').prop('checked', false);
-
-            // Hiển thị lại modal đăng nhập
-            showLoginModal();
-            FuiToast.info('Đã đăng xuất');
-        }
-
-
-        // Hàm tự động đăng nhập
-        async function autoLogin(username, token) {
-            if (!username || !token) {
-                showLoginModal();
-                return;
-            }
-
-            showLoading();
-
-            try {
-                const result = await apiRequest('CuTri', 'Find', {
-                    Properties: {
-                        Selector: `Filter(CuTri, [IDCT] = "${username}")`
-                    }
-                });
-
-                if (result && result.length === 1) {
-                    handleSuccessfulLogin(result[0], true);
-                } else {
-                    // Nếu auto login thất bại thì xóa thông tin và hiện form đăng nhập
-                    localStorage.removeItem('username');
-                    localStorage.removeItem('loginToken');
-                    showLoginModal();
-                }
-            } catch (error) {
-                console.error('Auto login error:', error);
-                localStorage.removeItem('username');
-                localStorage.removeItem('loginToken');
-                showLoginModal();
-            } finally {
-                hideLoading();
-            }
-        }
-
-        function resetPage() {
-            selectedCandidates = [];
-            currentFilteredCandidates = [];
-            $('#searchInput').val('');
-            saveSelectedCandidates();
-        }
-
-        function loadData() {
-            if (!currentUser) {
-                showLoginModal();
-                return;
-            }
-
-            showLoading();
-            resetPage();  // Add this line
-            Promise.all([
-                apiRequest('UngCuVien', 'Find', { Rows: [], Properties: { Selector: 'Filter(UngCuVien, [Trạng thái]="Đã duyệt")' } }),
-                apiRequest('PhieuBau', 'Find', { Rows: [], Properties: { Selector: 'Filter(PhieuBau, true)' } })
-            ]).then(([candidates, votes]) => {
+                dataCache = { candidates, votes };
+                lastLoadTime = now;
                 processCandidatesAndVotes(candidates, votes);
-                hideLoading();
-            }).catch(error => {
+
+            } catch (error) {
                 console.error('Lỗi khi tải dữ liệu:', error);
+                FuiToast.error('Không thể tải danh sách ứng cử viên: ' + error.message);
+            } finally {
                 hideLoading();
-            });
+            }
         }
 
         function processCandidatesAndVotes(candidates, votes) {
-            const candidateVotes = votes.reduce((acc, vote) => {
+            const voteCount = votes.reduce((acc, vote) => {
                 acc[vote.IDUCV] = (acc[vote.IDUCV] || 0) + 1;
                 return acc;
             }, {});
 
             allCandidates = candidates.map(candidate => ({
                 ...candidate,
-                votes: candidateVotes[candidate.IDUCV] || 0
+                votes: voteCount[candidate.IDUCV] || 0
             }));
 
             currentFilteredCandidates = [...allCandidates];
             updateCandidatesDisplay();
-            updateUIWithSelectedCandidates();
         }
 
-        // UI Management
-        function showLoading() {
-            $('#loadingOverlay').show();
-        }
-
-        function hideLoading() {
-            $('#loadingOverlay').hide();
-        }
-
+        // UI Updates
         function updateCandidatesDisplay() {
-            const candidatesToShow = currentFilteredCandidates;
-
             const cardContainer = $('#cardContainer');
             cardContainer.empty();
 
-            candidatesToShow.forEach(candidate => {
-                cardContainer.append(createCandidateCard(candidate));
+            currentFilteredCandidates.forEach(candidate => {
+                const cardElement = $(createCandidateCard(candidate));
+                cardContainer.append(cardElement);
             });
 
             updateUIWithSelectedCandidates();
-            animateCards();
         }
 
-        function createCandidateCard(candidate) {
-            return $(`
-            <div class="candidate-card bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:shadow-lg hover:-translate-y-1 flex flex-col h-full">
-                <img src="${candidate['Hình ảnh']}" 
-                     alt="Ảnh ứng cử viên" class="w-full h-48 object-cover">
-                <div class="p-4 flex-grow">
-                    <h2 class="text-xl font-bold mb-2">${candidate['Họ Và Tên']}</h2>
-                    <p class="text-gray-600"><i class="fas fa-id-card mr-2"></i> ID UCV: ${candidate.IDUCV}</p>
-                    <p class="text-gray-600"><i class="fas fa-birthday-cake mr-2"></i> Ngày Sinh: ${candidate['Ngày Sinh']}</p>
-                    <p class="text-gray-600"><i class="fas fa-map-marker-alt mr-2"></i> Tên doanh nghiệp: ${candidate['Tên doanh nghiệp']}</p>
-                    <p class="text-gray-600"><i class="fas fa-id-badge mr-2"></i> Chức vụ trong DN: ${candidate['Chức vụ trong DN']}</p>
-                    <p class="text-gray-600"><i class="fas fa-id-badge mr-2"></i> Chức vụ trong BIFA: ${candidate['Chức vụ trong BIFA']}</p>
-                </div>
-                <div class="p-4 bg-gray-100 mt-auto">
-                    <div class="grid grid-cols-2 gap-2">
-                        <button class="select-btn bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out text-sm" data-id="${candidate.IDUCV}">
-                            Chọn
-                        </button>
-                        <button class="view-info-btn bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out text-sm">
-                            <i class="fas fa-info-circle mr-1"></i>Xem thông tin
-                        </button>
-                    </div>
-                </div>
-            </div>
-        `);
-        }
-
-        function updateCandidateCard($card, candidate) {
-            $card.find('img').attr('src', `${candidate['Hình ảnh']}`);
-            $card.find('h2').text(candidate['Họ Và Tên']);
-            $card.find('p:eq(0)').html(`<i class="fas fa-id-card mr-2"></i> ID UCV: ${candidate.IDUCV}`);
-            $card.find('p:eq(1)').html(`<i class="fas fa-birthday-cake mr-2"></i> Ngày Sinh: ${candidate['Ngày Sinh']}`);
-            $card.find('p:eq(2)').html(`<i class="fas fa-map-marker-alt mr-2"></i> Tên doanh nghiệp: ${candidate['Tên doanh nghiệp']}`);
-            $card.find('p:eq(3)').html(`<i class="fas fa-id-badge mr-2"></i> Chức vụ trong DN: ${candidate['Chức vụ trong DN']}`);
-            $card.find('p:eq(4)').html(`<i class="fas fa-id-badge mr-2"></i> Chức vụ trong BIFA: ${candidate['Chức vụ trong BIFA']}`);
-            $card.find('.select-btn').data('id', candidate.IDUCV);
-        }
-
-        function animateCards() {
-            anime({
-                targets: '.candidate-card',
-                scale: [0.9, 1],
-                opacity: [0, 1],
-                duration: 800,
-                delay: anime.stagger(100),
-                easing: 'easeOutElastic(1, .8)'
-            });
-        }
 
         function updateUIWithSelectedCandidates() {
             $('.select-btn').each(function () {
                 const candidateId = $(this).data('id');
                 if (selectedCandidates.includes(candidateId)) {
-                    $(this).text('Đã chọn').addClass('bg-green-500').removeClass('bg-blue-500');
+                    $(this).html('<i class="fas fa-check mr-1"></i>Đã chọn')
+                        .removeClass('primary-button')
+                        .addClass('secondary-button');
                 } else {
-                    $(this).text('Chọn').addClass('bg-blue-500').removeClass('bg-green-500');
+                    $(this).html('Chọn')
+                        .addClass('primary-button')
+                        .removeClass('secondary-button');
                 }
             });
-            updateConfirmButton();
+
             updateSelectedCount();
+            updateConfirmButton();
         }
 
-
         function updateSelectedCount() {
-            $('#selectedCountButton').text(`${selectedCandidates.length}`);
+            $('#selectedCountText').text(selectedCandidates.length);
         }
 
         function updateConfirmButton() {
-            $('#confirmVoteButton').toggle(selectedCandidates.length > 0);
-        }
+            const confirmButton = $('#confirmVoteButton');
+            const isValidCount = selectedCandidates.length >= MIN_VOTES &&
+                selectedCandidates.length <= MAX_VOTES;
 
-        // Modal functions
-        function openSelectedCandidatesModal() {
-            const modal = $('#selectedCandidatesModal');
-            const list = $('#selectedCandidatesList');
-            list.empty();
-
-            selectedCandidates.forEach(candidateId => {
-                const candidate = allCandidates.find(c => c.IDUCV === candidateId);
-                if (candidate) {
-                    const li = createSelectedCandidateListItem(candidate);
-                    list.append(li);
-                }
-            });
-
-            modal.show();
-        }
-
-        function createSelectedCandidateListItem(candidate) {
-            const li = $('<li>').addClass('bg-gray-100 p-2 rounded flex justify-between items-center');
-            const candidateInfo = $('<div>')
-                .addClass('flex items-center cursor-pointer')
-                .click(() => showMemberInfo(candidate));
-
-            const img = $('<img>')
-                .attr('src', `${candidate['Hình ảnh']}`)
-                .attr('alt', candidate['Họ Và Tên'])
-                .addClass('w-10 h-10 rounded-full mr-2 object-cover');
-
-            const nameSpan = $('<span>')
-                .addClass('font-semibold')
-                .text(candidate['Họ Và Tên']);
-
-            const removeButton = $('<button>')
-                .addClass('bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded text-sm transition duration-300 ease-in-out')
-                .text('Xóa')
-                .click((e) => {
-                    e.stopPropagation();
-                    removeSelectedCandidate(candidate.IDUCV);
-                });
-
-            candidateInfo.append(img, nameSpan);
-            li.append(candidateInfo, removeButton);
-            return li;
-        }
-
-        function removeSelectedCandidate(candidateId) {
-            selectedCandidates = selectedCandidates.filter(id => id !== candidateId);
-            saveSelectedCandidates();
-            updateUIWithSelectedCandidates();
-            openSelectedCandidatesModal();
-        }
-
-        function showMemberInfo(candidate) {
-            const modal = $('#memberInfoModal');
-            $('#memberInfoContent').html(`
-            <div class="space-y-4">
-                <img src="${candidate['Hình ảnh']}" 
-                     alt="${candidate['Họ Và Tên']}" class="w-56 rounded-full mx-auto">
-                <p class="text-xl font-bold text-center">${candidate['Họ Và Tên']}</p>
-                <p><strong>ID UCV:</strong> ${candidate.IDUCV}</p>
-                <p><strong>Tên doanh nghiệp:</strong> ${candidate['Tên doanh nghiệp']}</p>
-                <p><strong>Chức vụ trong DN:</strong> ${candidate['Chức vụ trong DN']}</p>
-                <p><strong>Ngành nghề kinh doanh:</strong> ${candidate['Ngành nghề kinh doanh']}</p>
-                <p><strong>Chức vụ trong BIFA:</strong> ${candidate['Chức vụ trong BIFA']}</p>
-                <p><strong>Tiểu sử công tác:</strong> ${candidate['Tiểu sử công tác']}</p>
-                <p><strong>Thông tin giới thiệu bản thân:</strong> ${candidate['Thông tin giới thiệu bản thân'] || "Không có"}</p>
-            </div>
-        `);
-            modal.css('display', 'flex');
-            modal.find('.modal-dialog').addClass('is-open');
+            confirmButton.toggle(isValidCount);
         }
 
         // Voting Process
-        function confirmVote() {
-            if (selectedCandidates.length < MIN_VOTES) {
-                FuiToast.info(`Vui lòng chọn ít nhất ${MIN_VOTES} ứng cử viên.`);
-                return;
-            }
-            if (selectedCandidates.length > MAX_VOTES) {
-                FuiToast.info(`Vui lòng chọn tối đa ${MAX_VOTES} ứng cử viên.`);
+        function handleVoteSubmission() {
+            const voterId = $('#voterIdInput').val();
+            if (!voterId) {
+                FuiToast.info('Vui lòng nhập mã ID cử tri');
                 return;
             }
 
-            // Cập nhật text hiển thị số lượng đã chọn
-            $('#selectedCountText').text(`Bạn đã chọn ${selectedCandidates.length} ứng cử viên`);
-
-            $('#voteModal').show();
+            showLoading();
+            submitVote(voterId);
         }
 
-        async function submitVote() {
+        function updateSelectedCandidatesList() {
+            const list = $('#selectedCandidatesList');
+            list.empty();
 
-            if (!currentUser) {
-                FuiToast.error('Vui lòng đăng nhập để thực hiện bầu cử');
-                showLoginModal();
-                return;
-            }
+            selectedCandidates.forEach(id => {
+                const candidate = allCandidates.find(c => c.IDUCV === id);
+                if (candidate) {
+                    list.append(`<li class="text-gray-800">${candidate['Họ Và Tên']} - Công ty: ${candidate['Tên doanh nghiệp']}</li>`);
+                }
+            });
+        }
 
-            const voterId = currentUser.IDCT;
-            if (!voterId) {
-                FuiToast.info('Vui lòng nhập mã ID cử tri.');
-                return;
-            }
-
-            $('#voteModal').hide();
-            showLoading();
-
+        async function submitVote(voterId) {
             try {
                 const voters = await apiRequest('CuTri', 'Find', {
-                    Rows: [],
-                    Properties: { Selector: `Filter(CuTri, [IDCT] = "${voterId}")` }
+                    Properties: {
+                        Selector: `Filter(CuTri, [IDCT] = "${voterId}")`
+                    }
                 });
 
-                if (voters.length === 0) {
-                    throw new Error('Invalid voter ID');
+                if (!voters || voters.length === 0) {
+                    FuiToast.error('Mã ID cử tri không hợp lệ');
+                    return;
                 }
 
                 const voter = voters[0];
                 if (voter['Tình trạng cử tri'] !== 'Hợp lệ') {
-                    FuiToast.info('Bạn không đủ điều kiện để bầu cử');
+                    FuiToast.error('Bạn không đủ điều kiện để bầu cử');
                     return;
                 }
                 if (voter['Trạng Thái PB Ban Chấp Hành'] === 'Đã bầu cử') {
-                    FuiToast.info('Bạn đã bầu cử rồi');
+                    FuiToast.error('Bạn đã bầu cử rồi');
                     return;
                 }
 
-                const phieuBauRows = selectedCandidates.map(candidateId => ({
+                const votes = selectedCandidates.map(candidateId => ({
                     IDCT: voterId,
                     IDUCV: candidateId
                 }));
 
-                await apiRequest('PhieuBau', 'Add', { Rows: phieuBauRows });
+                await apiRequest('PhieuBau', 'Add', { Rows: votes });
                 await apiRequest('CuTri', 'Edit', {
-                    Rows: [{ IDCT: voterId, 'Trạng Thái PB Ban Chấp Hành': 'Đã bầu cử' }]
+                    Rows: [{
+                        IDCT: voterId,
+                        'Trạng Thái PB Ban Chấp Hành': 'Đã bầu cử'
+                    }]
                 });
 
-                FuiToast.success('Bầu cử thành công.');
-                selectedCandidates = [];
-                saveSelectedCandidates();
-                updateUIWithSelectedCandidates();
-                setTimeout(() => location.reload(), 2000);
+                FuiToast.success('Bầu cử thành công!');
+                resetVotingState();
 
             } catch (error) {
-                console.error('Error during voting process:', error);
-                if (error.message === 'Invalid voter ID') {
-                    FuiToast.info('Mã ID cử tri của bạn không đúng, hoặc không có trên hệ thống.');
-                } else {
-                    FuiToast.error("Có lỗi xảy ra, vui lòng thử lại.");
-                }
+                console.error('Lỗi trong quá trình bầu cử:', error);
+                FuiToast.error('Có lỗi xảy ra: ' + error.message);
             } finally {
                 hideLoading();
+                $('#voteModal').hide();
             }
         }
 
-        // Search and Filter
-        function handleSearch() {
-            const searchTerm = $('#searchInput').val().toLowerCase().trim();
-            currentFilteredCandidates = allCandidates.filter(candidate =>
-                candidate['Họ Và Tên'].toLowerCase().includes(searchTerm) ||
-                candidate.IDUCV.toLowerCase().includes(searchTerm) ||
-                candidate['Tên doanh nghiệp'].toLowerCase().includes(searchTerm)
-            );
+        function resetVotingState() {
+            selectedCandidates = [];
+            $('#voterIdInput').val('');
+            updateUIWithSelectedCandidates();
+
+            setTimeout(() => {
+                dataCache = null;
+                loadData(true);
+            }, 1000);
         }
 
-        // Utility functions
-        function throttle(func, limit) {
-            let inThrottle;
-            return function () {
-                const args = arguments;
-                const context = this;
-                if (!inThrottle) {
-                    func.apply(context, args);
-                    inThrottle = true;
-                    setTimeout(() => inThrottle = false, limit);
-                }
-            }
-        }
+        // Event Handlers
+        function setupEventListeners() {
+            // Search functionality
+            const handleSearch = debounce(() => {
+                const searchTerm = $('#searchInput').val().toLowerCase();
+                currentFilteredCandidates = allCandidates.filter(candidate =>
+                    candidate['Họ Và Tên'].toLowerCase().includes(searchTerm) ||
+                    candidate.IDUCV.toLowerCase().includes(searchTerm) ||
+                    candidate['Tên doanh nghiệp'].toLowerCase().includes(searchTerm)
+                );
+                updateCandidatesDisplay();
+            }, 300);
 
-        document.getElementById('closeGreetingButton').addEventListener('click', function () {
-            const greetingContainer = document.getElementById('greetingContainer');
-            greetingContainer.classList.toggle('minimized');
+            $('#searchInput').on('input', handleSearch);
 
-            const userIcon = document.getElementById('userIcon');
-            if (greetingContainer.classList.contains('minimized')) {
-                userIcon.classList.remove('hidden'); // Hiển thị icon user
-            } else {
-                userIcon.classList.add('hidden'); // Ẩn icon user
-            }
-        });
-
-
-
-        // Event Listeners
-        $(document).ready(() => {
-            // Ẩn main content ban đầu
-            $('main').hide();
-
-            // Kiểm tra đăng nhập 1 lần khi load trang
-            checkLoginStatus();
-
-            // Event listeners cho đăng nhập
-            $('#loginButton').click(handleLogin);
-
-            // Cho phép đăng nhập bằng Enter key
-            $('#loginPassword').keypress((e) => {
-                if (e.which === 13) handleLogin();
-            });
-
-            // Sự kiện cho nút Đăng xuất trong InfoModal
-            $('#logoutButton').click(handleLogout);
-
-            // Event listeners cho search và filter
-            $('#searchForm').on('submit', (e) => {
-                e.preventDefault();
-                handleSearch();
-            });
-
-            $('#searchInput').off('input').on('input', throttle(handleSearch, 300));
-
-            // Event listeners cho bầu cử
-            $('#confirmVoteButton').click(confirmVote);
-            $('#selectedCountButton').click(openSelectedCandidatesModal);
-            $('#submitVoteButton').click(submitVote);
-            $('#refreshButton').click(() => {
-                if (currentUser) {
-                    loadData();
-                }
-            });
-
-            // Event listeners cho xem thông tin ứng viên
-            $(document).on('click', '.view-info-btn', function () {
-                const candidateId = $(this).closest('.candidate-card').find('p:contains("ID UCV:")').text().split(': ')[1];
-                const candidate = allCandidates.find(c => c.IDUCV === candidateId);
-                if (candidate) {
-                    showMemberInfo(candidate);
-                }
-            });
-
-            // Event listener cho chọn ứng viên
+            // Button clicks
             $(document).on('click', '.select-btn', function () {
                 const candidateId = $(this).data('id');
                 if (selectedCandidates.includes(candidateId)) {
                     selectedCandidates = selectedCandidates.filter(id => id !== candidateId);
-                    $(this).text('Chọn').removeClass('selected').addClass('bg-blue-500');
                 } else {
                     if (selectedCandidates.length >= MAX_VOTES) {
-                        FuiToast.info(`Bạn đã chọn tối đa ${MAX_VOTES} ứng cử viên.`);
+                        FuiToast.info(`Bạn chỉ được chọn tối đa ${MAX_VOTES} ứng cử viên`);
                         return;
                     }
                     selectedCandidates.push(candidateId);
-                    $(this).text('Đã chọn').addClass('selected').removeClass('bg-blue-500');
                 }
-                saveSelectedCandidates();
-                updateConfirmButton();
-                updateSelectedCount();
+                updateUIWithSelectedCandidates();
             });
 
-            // Event listeners cho đóng modal
-            $('.close, .modal-close').click(function () {
-                $(this).closest('.modal, .modal-mask').hide();
+            function showModal(modalId) {
+                // Hiển thị modal và ngăn cuộn ở màn hình chính
+                $(modalId).show();
+                $('body').addClass('no-scroll');  // Thêm lớp no-scroll vào body
+            }
+
+            function hideModal(modalId) {
+                // Ẩn modal và cho phép cuộn lại
+                $(modalId).hide();
+                $('body').removeClass('no-scroll'); // Xóa lớp no-scroll khỏi body
+            }
+
+            // Modal handling
+            $('.modal').on('click', function (e) {
+                if (e.target === this) {
+                    hideModal(this);
+                }
             });
 
-            // Animation cho buttons
-            $('button').on('mouseenter', function () {
+            $('.close-button').on('click', function () {
+                hideModal($(this).closest('.modal'));
+            });
+
+            // Floating action buttons
+            $('#confirmVoteButton').on('click', () => showModal('#voteModal'));
+            $('#refreshButton').on('click', () => loadData(true));
+            $('#submitVoteButton').on('click', handleVoteSubmission);
+            $('#selectedCountButton').on('click', function () {
+                updateSelectedCandidatesList();
+                showModal('#selectedCandidatesModal');
+            });
+
+            // View candidate info
+            $(document).on('click', '.view-info-btn', function () {
+                const card = $(this).closest('.candidate-card');
+                const candidateId = card.find('.select-btn').data('id');
+                const candidate = allCandidates.find(c => c.IDUCV === candidateId);
+
+                if (candidate) {
+                    showCandidateInfo(candidate);
+                }
+            });
+        }
+
+        function showCandidateInfo(candidate) {
+            const content = `
+                <div class="space-y-6">
+                    <div class="text-center">
+                        <img src="${candidate['Hình ảnh']}" 
+                             alt="${candidate['Họ Và Tên']}" 
+                             class="w-48 rounded-full mx-auto object-cover mb-4">
+                        <h3 class="text-2xl font-bold text-gray-900">${candidate['Họ Và Tên']}</h3>
+                        <p class="text-gray-500">${candidate['Chức vụ trong DN']}</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="info-item">
+                            <strong class="text-gray-700">ID UCV:</strong>
+                            <span>${candidate.IDUCV}</span>
+                        </div>
+                        <div class="info-item">
+                            <strong class="text-gray-700">Doanh nghiệp:</strong>
+                            <span>${candidate['Tên doanh nghiệp']}</span>
+                        </div>
+                        <div class="info-item">
+                            <strong class="text-gray-700">Chức vụ BIFA:</strong>
+                            <span>${candidate['Chức vụ trong BIFA']}</span>
+                        </div>
+                        <div class="info-item">
+                            <strong class="text-gray-700">Ngành nghề:</strong>
+                            <span>${candidate['Ngành nghề kinh doanh']}</span>
+                        </div>
+                    </div>
+                    <div class="space-y-3">
+                        <div>
+                            <h4 class="font-semibold text-gray-900">Tiểu sử công tác</h4>
+                            <p class="text-gray-700">${candidate['Tiểu sử công tác']}</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-900">Giới thiệu bản thân</h4>
+                            <p class="text-gray-700">${candidate['Thông tin giới thiệu bản thân'] || 'Không có thông tin'}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            $('#memberInfoContent').html(content);
+            $('#memberInfoModal').show();
+
+        }
+
+        // Utility Functions
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // Keyboard Events
+        function setupKeyboardEvents() {
+            $(document).on('keydown', function (e) {
+                // Close modals on ESC
+                if (e.key === 'Escape') {
+                    $('.modal').hide();
+                }
+
+                // Submit search on Enter
+                if (e.key === 'Enter' && document.activeElement === $('#searchInput')[0]) {
+                    e.preventDefault();
+                    const searchTerm = $('#searchInput').val().toLowerCase();
+                    currentFilteredCandidates = allCandidates.filter(candidate =>
+                        candidate['Họ Và Tên'].toLowerCase().includes(searchTerm) ||
+                        candidate.IDUCV.toLowerCase().includes(searchTerm) ||
+                        candidate['Tên doanh nghiệp'].toLowerCase().includes(searchTerm)
+                    );
+                    updateCandidatesDisplay();
+                }
+            });
+        }
+
+        // Animation Functions
+        function setupAnimations() {
+            // Button hover animations
+            $('.action-button, .floating-button').on('mouseenter', function () {
                 anime({
                     targets: this,
                     scale: 1.05,
-                    duration: 300,
-                    easing: 'easeOutElastic(1, .8)'
+                    duration: 200,
+                    easing: 'easeOutQuad'
                 });
             }).on('mouseleave', function () {
                 anime({
                     targets: this,
                     scale: 1,
-                    duration: 300,
-                    easing: 'easeOutElastic(1, .8)'
+                    duration: 200,
+                    easing: 'easeOutQuad'
                 });
             });
 
-            // Xử lý responsive controlPanel
-            let isControlPanelVisible = false;
+            // Card hover animations
+            $('.candidate-card').on('mouseenter', function () {
+                anime({
+                    targets: this,
+                    translateY: -8,
+                    boxShadow: '0 15px 30px rgba(0, 0, 0, 0.1)',
+                    duration: 300,
+                    easing: 'easeOutQuad'
+                });
+            }).on('mouseleave', function () {
+                anime({
+                    targets: this,
+                    translateY: 0,
+                    boxShadow: '0 10px 20px rgba(0, 0, 0, 0.05)',
+                    duration: 300,
+                    easing: 'easeOutQuad'
+                });
+            });
+        }
+
+        // Error Handling
+        function setupErrorHandling() {
+            $(document).ajaxError(function (event, jqxhr, settings, thrownError) {
+                hideLoading();
+                console.error('Ajax error:', thrownError);
+                FuiToast.error('Có lỗi xảy ra, vui lòng thử lại sau');
+            });
+
+            window.onerror = function (msg, url, line, col, error) {
+                console.error('Global error:', error);
+                FuiToast.error('Có lỗi xảy ra trong ứng dụng');
+                return false;
+            };
+        }
+
+        // Initialize Application
+        $(document).ready(function () {
+            setupEventListeners();
+            setupKeyboardEvents();
+            setupErrorHandling();
+            loadData();
+
+            // Initialize tooltips and other UI enhancements
+            setupAnimations();
+
+            // Handle page visibility changes
+            document.addEventListener('visibilitychange', function () {
+                if (!document.hidden && lastLoadTime && (Date.now() - lastLoadTime > CACHE_DURATION)) {
+                    loadData(true);
+                }
+            });
+
+            // Handle network status
+            window.addEventListener('online', function () {
+                FuiToast.success('Đã kết nối lại internet');
+                loadData(true);
+            });
+
+            window.addEventListener('offline', function () {
+                FuiToast.error('Mất kết nối internet');
+            });
+
+            // Handle page resize
+            let resizeTimeout;
+            window.addEventListener('resize', function () {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(function () {
+                    updateCandidatesDisplay();
+                }, 250);
+            });
+
+            // Show initial loading state
+            showLoading();
         });
     </script>
 </body>
