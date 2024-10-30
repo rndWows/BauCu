@@ -686,7 +686,7 @@
             selectedCandidates.forEach(id => {
                 const candidate = allCandidates.find(c => c.IDUCV === id);
                 if (candidate) {
-                    list.append(`<li class="text-gray-800">${candidate['Họ Và Tên']} - Công ty: ${candidate['Tên doanh nghiệp']}</li>`);
+                    list.append(`<li class="text-gray-800">${candidate['Họ Và Tên']} - ${candidate['Tên doanh nghiệp']}</li>`);
                 }
             });
         }
