@@ -684,12 +684,13 @@
         function handleVoteSubmission() {
             const voterId = $('#voterIdInput').val();
 
-            // Kiểm tra thời gian hiện tại
             const now = new Date();
             const currentHour = now.getHours();
+            const currentMinutes = now.getMinutes();
 
-            if (currentHour < 8 || currentHour >= 10) {
-                FuiToast.error('Chỉ có thể bầu cử từ 8h sáng đến 10h sáng.');
+            // Check if the current time is between 15:00 and 15:30
+            if (currentHour !== 15 || currentMinutes < 0 || currentMinutes >= 30) {
+                FuiToast.error('Chỉ có thể bầu cử từ 15h đến 15h30.');
                 return;
             }
 
