@@ -124,6 +124,28 @@
             font-size: 0.875rem;
         }
 
+        .red-button {
+            background: linear-gradient(135deg, #F95454 0%, #F95454 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+
+        .red-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(155, 13, 13, 0.4);
+        }
+
+        .green-button {
+            background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+
+        .green-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(79, 70, 229, 0.4);
+        }
+
         .primary-button {
             background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
             color: white;
@@ -528,7 +550,7 @@
                     </div>
                     <div class="p-4 bg-gray-50 border-t border-gray-100">
                         <div class="grid grid-cols-2 gap-3">
-                            <button class="select-btn action-button primary-button" data-id="${candidate.IDUCV}">
+                            <button class="select-btn action-button red-button" data-id="${candidate.IDUCV}">
                                 Chọn
                             </button>
                             <button class="view-info-btn action-button secondary-button">
@@ -655,12 +677,12 @@
                 const candidateId = $(this).data('id');
                 if (selectedCandidates.includes(candidateId)) {
                     $(this).html('<i class="fas fa-check mr-1"></i>Đã chọn')
-                        .removeClass('primary-button')
-                        .addClass('secondary-button');
+                        .removeClass('red-button')
+                        .addClass('green-button');  // Use 'green-button' for selected
                 } else {
                     $(this).html('Chọn')
-                        .addClass('primary-button')
-                        .removeClass('secondary-button');
+                        .addClass('red-button')
+                        .removeClass('green-button');  // Use 'red-button' for unselected
                 }
             });
 
@@ -752,6 +774,9 @@
                 });
 
                 FuiToast.success('Bầu cử thành công!');
+
+                updateSelectedCandidatesList(); // Cập nhật danh sách ứng viên đã chọn
+                $('#selectedCandidatesModal').show(); // Hiển thị modal danh sách đã chọn
                 resetVotingState();
 
             } catch (error) {
@@ -762,6 +787,7 @@
                 $('#voteModal').hide();
             }
         }
+
 
         function resetVotingState() {
             selectedCandidates = [];
@@ -800,8 +826,8 @@
                     selectedCandidates = selectedCandidates.filter(id => id !== candidateId);
                     FuiToast.info(`${candidate['Họ Và Tên']} đã được bỏ chọn`);
                     $(this).html('Chọn')
-                        .addClass('primary-button')
-                        .removeClass('secondary-button');
+                        .addClass('red-button')
+                        .removeClass('green-button');  // Red when unselected
                 } else {
                     // Check if the maximum selection limit is reached
                     if (selectedCandidates.length >= MAX_VOTES) {
@@ -813,13 +839,14 @@
                     selectedCandidates.push(candidateId);
                     FuiToast.success(`${candidate['Họ Và Tên']} đã được chọn`);
                     $(this).html('<i class="fas fa-check mr-1"></i>Đã chọn')
-                        .removeClass('primary-button')
-                        .addClass('secondary-button');
+                        .removeClass('red-button')
+                        .addClass('green-button');  // Green when selected
                 }
 
                 updateSelectedCount();
                 updateConfirmButton();
             });
+
 
 
             function showModal(modalId) {
