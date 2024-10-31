@@ -532,7 +532,7 @@
                                 Chọn
                             </button>
                             <button class="view-info-btn action-button secondary-button">
-                                <i class="fas fa-info-circle mr-1"></i>Chi tiết
+                                <i class="fas fa-info-circle mr-1"></i>Xem thêm
                             </button>
                         </div>
                     </div>
@@ -551,8 +551,6 @@
         let currentFilteredCandidates = [];
         let isLoading = false;
         let dataCache = null;
-        let lastLoadTime = 0;
-        const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
         // Loading Management
         function showLoading() {
@@ -587,14 +585,8 @@
         }
 
         // Data Management
-        async function loadData(forceReload = false) {
-            const now = Date.now();
-
-            if (!forceReload && dataCache && (now - lastLoadTime < CACHE_DURATION)) {
-                processCandidatesAndVotes(dataCache.candidates, dataCache.votes);
-                return;
-            }
-
+        // API Functions
+        async function loadData() {
             if (isLoading) return;
 
             showLoading();
@@ -618,8 +610,6 @@
                     return;
                 }
 
-                dataCache = { candidates, votes };
-                lastLoadTime = now;
                 processCandidatesAndVotes(candidates, votes);
 
             } catch (error) {
@@ -629,6 +619,7 @@
                 hideLoading();
             }
         }
+
 
         function processCandidatesAndVotes(candidates, votes) {
             const voteCount = votes.reduce((acc, vote) => {
@@ -692,6 +683,16 @@
         // Voting Process
         function handleVoteSubmission() {
             const voterId = $('#voterIdInput').val();
+
+            // Kiểm tra thời gian hiện tại
+            const now = new Date();
+            const currentHour = now.getHours();
+
+            if (currentHour < 8 || currentHour >= 10) {
+                FuiToast.error('Chỉ có thể bầu cử từ 8h sáng đến 10h sáng.');
+                return;
+            }
+
             if (!voterId) {
                 FuiToast.info('Vui lòng nhập mã ID cử tri');
                 return;
@@ -708,7 +709,7 @@
             selectedCandidates.forEach(id => {
                 const candidate = allCandidates.find(c => c.IDUCV === id);
                 if (candidate) {
-                    list.append(`<li class="text-gray-800">${candidate['Họ Và Tên']} - Công ty: ${candidate['Tên doanh nghiệp']}</li>`);
+                    list.append(`<li class="text-gray-800">${candidate['Họ Và Tên']} - ${candidate['Tên doanh nghiệp']}</li>`);
                 }
             });
         }
@@ -788,19 +789,37 @@
             $('#searchInput').on('input', handleSearch);
 
             // Button clicks
+            // Main Selection Button Logic
             $(document).on('click', '.select-btn', function () {
                 const candidateId = $(this).data('id');
+                const candidate = allCandidates.find(c => c.IDUCV === candidateId);
+
                 if (selectedCandidates.includes(candidateId)) {
+                    // Deselect the candidate
                     selectedCandidates = selectedCandidates.filter(id => id !== candidateId);
+                    FuiToast.info(`${candidate['Họ Và Tên']} đã được bỏ chọn`);
+                    $(this).html('Chọn')
+                        .addClass('primary-button')
+                        .removeClass('secondary-button');
                 } else {
+                    // Check if the maximum selection limit is reached
                     if (selectedCandidates.length >= MAX_VOTES) {
                         FuiToast.info(`Bạn chỉ được chọn tối đa ${MAX_VOTES} ứng cử viên`);
                         return;
                     }
+
+                    // Select the candidate
                     selectedCandidates.push(candidateId);
+                    FuiToast.success(`${candidate['Họ Và Tên']} đã được chọn`);
+                    $(this).html('<i class="fas fa-check mr-1"></i>Đã chọn')
+                        .removeClass('primary-button')
+                        .addClass('secondary-button');
                 }
-                updateUIWithSelectedCandidates();
+
+                updateSelectedCount();
+                updateConfirmButton();
             });
+
 
             function showModal(modalId) {
                 // Hiển thị modal và ngăn cuộn ở màn hình chính
@@ -827,7 +846,7 @@
 
             // Floating action buttons
             $('#confirmVoteButton').on('click', () => showModal('#voteModal'));
-            $('#refreshButton').on('click', () => loadData(true));
+            $('#refreshButton').on('click', () => loadData());
             $('#submitVoteButton').on('click', handleVoteSubmission);
             $('#selectedCountButton').on('click', function () {
                 updateSelectedCandidatesList();
@@ -847,50 +866,80 @@
         }
 
         function showCandidateInfo(candidate) {
+            const isSelected = selectedCandidates.includes(candidate.IDUCV);
+            const selectButtonText = isSelected ? 'Đã chọn' : 'Chọn';
+
             const content = `
-                <div class="space-y-6">
-                    <div class="text-center">
-                        <img src="${candidate['Hình ảnh']}" 
-                             alt="${candidate['Họ Và Tên']}" 
-                             class="w-48 rounded-full mx-auto object-cover mb-4">
-                        <h3 class="text-2xl font-bold text-gray-900">${candidate['Họ Và Tên']}</h3>
-                        <p class="text-gray-500">${candidate['Chức vụ trong DN']}</p>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="info-item">
-                            <strong class="text-gray-700">ID UCV:</strong>
-                            <span>${candidate.IDUCV}</span>
-                        </div>
-                        <div class="info-item">
-                            <strong class="text-gray-700">Doanh nghiệp:</strong>
-                            <span>${candidate['Tên doanh nghiệp']}</span>
-                        </div>
-                        <div class="info-item">
-                            <strong class="text-gray-700">Chức vụ BIFA:</strong>
-                            <span>${candidate['Chức vụ trong BIFA']}</span>
-                        </div>
-                        <div class="info-item">
-                            <strong class="text-gray-700">Ngành nghề:</strong>
-                            <span>${candidate['Ngành nghề kinh doanh']}</span>
-                        </div>
-                    </div>
-                    <div class="space-y-3">
-                        <div>
-                            <h4 class="font-semibold text-gray-900">Tiểu sử công tác</h4>
-                            <p class="text-gray-700 khoangtrang">${candidate['Tiểu sử công tác']}</p>
-                        </div>
-                        <div>
-                            <h4 class="font-semibold text-gray-900">Giới thiệu bản thân</h4>
-                            <p class="text-gray-700">${candidate['Thông tin giới thiệu bản thân'] || 'Không có thông tin'}</p>
-                        </div>
-                    </div>
+        <div class="space-y-6">
+            <div class="text-center">
+                <img src="${candidate['Hình ảnh']}" 
+                     alt="${candidate['Họ Và Tên']}" 
+                     class="w-48 rounded-full mx-auto object-cover mb-4">
+                <h3 class="text-2xl font-bold text-gray-900">${candidate['Họ Và Tên']}</h3>
+                <p class="text-gray-500">${candidate['Chức vụ trong DN']}</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="info-item">
+                    <strong class="text-gray-700">ID UCV:</strong>
+                    <span>${candidate.IDUCV}</span>
                 </div>
-            `;
+                <div class="info-item">
+                    <strong class="text-gray-700">Doanh nghiệp:</strong>
+                    <span>${candidate['Tên doanh nghiệp']}</span>
+                </div>
+                <div class="info-item">
+                    <strong class="text-gray-700">Chức vụ BIFA:</strong>
+                    <span>${candidate['Chức vụ trong BIFA']}</span>
+                </div>
+                <div class="info-item">
+                    <strong class="text-gray-700">Ngành nghề:</strong>
+                    <span>${candidate['Ngành nghề kinh doanh']}</span>
+                </div>
+            </div>
+            <div class="space-y-3">
+                <div>
+                    <h4 class="font-semibold text-gray-900">Tiểu sử công tác</h4>
+                    <p class="text-gray-700 khoangtrang">${candidate['Tiểu sử công tác']}</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-gray-900">Giới thiệu bản thân</h4>
+                    <p class="text-gray-700">${candidate['Thông tin giới thiệu bản thân'] || 'Không có thông tin'}</p>
+                </div>
+            </div>
+            <!-- Select and Back Buttons -->
+            <div class="flex justify-between mt-6">
+                <button id="selectCandidateButton" class="action-button primary-button w-1/2 mr-2">${selectButtonText}</button>
+                <button id="backButton" class="action-button secondary-button w-1/2 ml-2">Quay lại</button>
+            </div>
+        </div>
+    `;
 
             $('#memberInfoContent').html(content);
             $('#memberInfoModal').show();
 
+            // Select Button Logic
+            $('#selectCandidateButton').on('click', function () {
+                if (isSelected) {
+                    selectedCandidates = selectedCandidates.filter(id => id !== candidate.IDUCV);
+                    FuiToast.info(`${candidate['Họ Và Tên']} đã được bỏ chọn`);
+                } else {
+                    if (selectedCandidates.length >= MAX_VOTES) {
+                        FuiToast.info(`Bạn chỉ được chọn tối đa ${MAX_VOTES} ứng cử viên`);
+                        return;
+                    }
+                    selectedCandidates.push(candidate.IDUCV);
+                    FuiToast.success(`${candidate['Họ Và Tên']} đã được chọn`);
+                }
+                updateUIWithSelectedCandidates();
+                $('#memberInfoModal').hide();
+            });
+
+            // Back Button Logic
+            $('#backButton').on('click', function () {
+                $('#memberInfoModal').hide();
+            });
         }
+
 
         // Utility Functions
         function debounce(func, wait) {
@@ -991,18 +1040,7 @@
             // Initialize tooltips and other UI enhancements
             setupAnimations();
 
-            // Handle page visibility changes
-            document.addEventListener('visibilitychange', function () {
-                if (!document.hidden && lastLoadTime && (Date.now() - lastLoadTime > CACHE_DURATION)) {
-                    loadData(true);
-                }
-            });
 
-            // Handle network status
-            window.addEventListener('online', function () {
-                FuiToast.success('Đã kết nối lại internet');
-                loadData(true);
-            });
 
             window.addEventListener('offline', function () {
                 FuiToast.error('Mất kết nối internet');
