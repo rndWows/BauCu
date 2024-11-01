@@ -516,6 +516,23 @@
         </div>
     </div>
 
+    <!-- Success Modal -->
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Bầu cử thành công</h2>
+                <span class="close-button">&times;</span>
+            </div>
+            <div class="modal-body text-center">
+                <p class="mb-4 text-gray-700">Bạn đã bầu cử thành công!</p>
+                <button id="returnHomeButton" class="action-button primary-button w-full">
+                    Quay về trang chủ
+                </button>
+            </div>
+        </div>
+    </div>
+
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
 
@@ -855,9 +872,7 @@
                 });
 
                 FuiToast.success('Bầu cử thành công!');
-
-                // Redirect to the new URL after successful voting
-                window.location.href = "https://rndwows.github.io/BauCu/giaodien.html";
+                $('#successModal').show();
                 resetVotingState();
 
             } catch (error) {
@@ -980,6 +995,16 @@
                 if (candidate) {
                     showCandidateInfo(candidate);
                 }
+            });
+
+            // Close modal and redirect to homepage on button click
+            $('#returnHomeButton').on('click', function () {
+                window.location.href = "https://rndwows.github.io/BauCu/giaodien.html";
+            });
+
+            // Close success modal on clicking the close button
+            $('#successModal .close-button').on('click', function () {
+                $('#successModal').hide();
             });
         }
 
