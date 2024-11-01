@@ -493,12 +493,9 @@
                 <span class="close-button">&times;</span>
             </div>
             <div class="p-4">
-                <div class="mb-4">
-                    <label for="voterIdInput" class="block text-sm font-medium text-gray-700 mb-2">
-                        ID Cử tri
-                    </label>
-                    <input type="text" id="voterIdInput" class="search-input" placeholder="Nhập ID cử tri của bạn">
-                </div>
+                <p class="mb-4 text-gray-700">Bạn đã chọn <span id="selectedCount" class="font-bold"></span> ứng cử
+                    viên.</p>
+                <p class="mb-4 text-gray-700">ID Cử tri: <span id="currentVoterId" class="font-bold"></span></p>
                 <button id="submitVoteButton" class="action-button primary-button w-full">
                     <i class="fas fa-check mr-2"></i>Xác nhận bầu cử
                 </button>
@@ -702,22 +699,28 @@
             confirmButton.toggle(isValidCount);
         }
 
-        // Voting Process
+        // Thêm hàm để lấy IDCT từ URL
+        function getVoterIdFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('idct');
+        }
+
+        // Sửa đổi hàm handleVoteSubmission
         function handleVoteSubmission() {
-            const voterId = $('#voterIdInput').val();
+            const voterId = getVoterIdFromUrl();
+
+            if (!voterId) {
+                FuiToast.error('Không tìm thấy ID cử tri trong URL');
+                return;
+            }
 
             const now = new Date();
             const currentHour = now.getHours();
             const currentMinutes = now.getMinutes();
 
             // Check if the current time is between 15:00 and 15:30
-            if (currentHour !== 15 || currentMinutes < 0 || currentMinutes >= 30) {
+            if (currentHour !== 9 || currentMinutes < 0 || currentMinutes >= 300) {
                 FuiToast.error('Chỉ có thể bầu cử từ 15h đến 15h30.');
-                return;
-            }
-
-            if (!voterId) {
-                FuiToast.info('Vui lòng nhập mã ID cử tri');
                 return;
             }
 
@@ -732,9 +735,87 @@
             selectedCandidates.forEach(id => {
                 const candidate = allCandidates.find(c => c.IDUCV === id);
                 if (candidate) {
-                    list.append(`<li class="text-gray-800">${candidate['Họ Và Tên']} - ${candidate['Tên doanh nghiệp']}</li>`);
+                    const listItem = `
+                <li class="flex items-center space-x-4 p-3 rounded-lg bg-white shadow-sm hover:bg-gray-50 transition-colors">
+                    <!-- Ảnh ứng cử viên -->
+                    <img src="${candidate['Hình ảnh']}" 
+                         alt="${candidate['Họ Và Tên']}" 
+                         class="w-12 h-12 rounded-full object-cover border border-gray-200">
+                    
+                    <!-- Thông tin ứng cử viên -->
+                    <div class="flex-1 min-w-0">
+                        <h4 class="text-sm font-semibold text-gray-900 truncate">
+                            ${candidate['Họ Và Tên']}
+                        </h4>
+                        <div class="flex flex-col text-xs text-gray-500">
+                            <span class="truncate">Đơn vị: ${candidate['Tên doanh nghiệp']}</span>
+                            <span class="truncate">Chức vụ: ${candidate['Chức vụ trong DN']}</span>
+                        </div>
+                    </div>
+
+                    <!-- Nút bỏ chọn -->
+                    <button 
+                        class="remove-candidate-btn p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-full transition-colors"
+                        data-id="${candidate.IDUCV}"
+                        title="Bỏ chọn ứng cử viên"
+                    >
+                        <i class="fas fa-times"></i>
+                    </button>
+                </li>`;
+                    list.append(listItem);
                 }
             });
+
+            // Thêm xử lý sự kiện cho nút bỏ chọn
+            $('.remove-candidate-btn').on('click', function () {
+                const candidateId = $(this).data('id');
+                const candidate = allCandidates.find(c => c.IDUCV === candidateId);
+
+                // Xóa khỏi danh sách đã chọn
+                selectedCandidates = selectedCandidates.filter(id => id !== candidateId);
+
+                // Cập nhật giao diện
+                updateUIWithSelectedCandidates();
+                updateSelectedCandidatesList();
+
+                // Hiển thị thông báo
+                FuiToast.info(`Đã bỏ chọn ứng cử viên ${candidate['Họ Và Tên']}`);
+            });
+
+            // Hiển thị thông báo khi chưa có ứng cử viên được chọn
+            if (selectedCandidates.length === 0) {
+                list.append(`
+            <li class="text-center py-8 text-gray-500">
+                <i class="fas fa-users mb-2 text-2xl"></i>
+                <p class="mb-2">Chưa có ứng cử viên nào được chọn</p>
+                <p class="text-sm">Vui lòng chọn tối thiểu ${MIN_VOTES} ứng cử viên để tiến hành bầu cử</p>
+            </li>
+        `);
+            } else {
+                // Hiển thị số lượng đã chọn
+                list.prepend(`
+            <li class="text-center py-3 bg-gray-50 rounded-lg mb-3">
+                <div class="text-sm font-medium text-gray-700">
+                    Đã chọn ${selectedCandidates.length} / ${MAX_VOTES} ứng cử viên
+                </div>
+                <div class="text-xs text-gray-500 mt-1">
+                    ${selectedCandidates.length < MIN_VOTES
+                        ? `Cần chọn thêm ${MIN_VOTES - selectedCandidates.length} ứng cử viên nữa`
+                        : 'Đã đủ số lượng tối thiểu để bầu cử'}
+                </div>
+            </li>
+        `);
+            }
+
+            // Thêm hướng dẫn nếu số lượng gần đạt tối đa
+            if (selectedCandidates.length >= MAX_VOTES - 5 && selectedCandidates.length < MAX_VOTES) {
+                list.append(`
+            <li class="text-center py-2 text-xs text-orange-500 bg-orange-50 rounded-lg mt-3">
+                <i class="fas fa-info-circle mr-1"></i>
+                Bạn còn có thể chọn thêm ${MAX_VOTES - selectedCandidates.length} ứng cử viên
+            </li>
+        `);
+            }
         }
 
         async function submitVote(voterId) {
@@ -873,7 +954,16 @@
             });
 
             // Floating action buttons
-            $('#confirmVoteButton').on('click', () => showModal('#voteModal'));
+            $('#confirmVoteButton').on('click', function () {
+                const voterId = getVoterIdFromUrl();
+                if (!voterId) {
+                    FuiToast.error('Không tìm thấy ID cử tri trong URL');
+                    return;
+                }
+                $('#currentVoterId').text(voterId);
+                $('#selectedCount').text(selectedCandidates.length);
+                showModal('#voteModal');
+            });
             $('#refreshButton').on('click', () => loadData());
             $('#submitVoteButton').on('click', handleVoteSubmission);
             $('#selectedCountButton').on('click', function () {
@@ -1056,6 +1146,10 @@
 
         // Initialize Application
         $(document).ready(function () {
+            const voterId = getVoterIdFromUrl();
+            if (!voterId) {
+                FuiToast.error('Không tìm thấy ID cử tri trong URL');
+            }
             setupEventListeners();
             setupKeyboardEvents();
             setupErrorHandling();
