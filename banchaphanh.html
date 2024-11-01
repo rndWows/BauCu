@@ -537,6 +537,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
 
     <script>
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
         function createCandidateCard(candidate) {
             return `
                 <div class="candidate-card">
@@ -668,6 +675,7 @@
                 votes: voteCount[candidate.IDUCV] || 0
             }));
 
+            shuffleArray(allCandidates);
             currentFilteredCandidates = [...allCandidates];
             updateCandidatesDisplay();
         }
