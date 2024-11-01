@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Bầu Cử</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .hover-card {
+            transition: all 0.3s ease;
+        }
+
+        .hover-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .input-focus:focus {
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex items-center justify-center p-4 md:p-6">
+    <div class="max-w-6xl w-full">
+        <!-- Header Section with enhanced styling -->
+        <div class="text-center mb-10 animate-fade-in">
+            <h1 class="text-4xl md:text-5xl font-bold text-white mb-4 tracking-tight">
+                HỆ THỐNG BẦU CỬ TRỰC TUYẾN
+            </h1>
+            <p class="text-white/90 text-lg md:text-xl font-medium">
+                Chào mừng đến với hệ thống bầu cử điện tử
+            </p>
+        </div>
+
+        <!-- Main Container with glass effect -->
+        <div class="glass-effect rounded-3xl p-6 md:p-8 shadow-2xl animate-fade-in">
+            <!-- ID Input Section -->
+            <div class="max-w-xl mx-auto mb-10">
+                <label class="block text-white text-sm font-medium mb-3">ID Cử tri</label>
+                <div class="relative">
+                    <input id="voterId" type="text" placeholder="Nhập ID cử tri của bạn..." class="w-full px-5 py-4 rounded-xl bg-white/90 text-gray-800 text-lg 
+                                  focus:outline-none input-focus transition-all duration-300
+                                  border border-transparent focus:border-blue-300">
+                    <button onclick="checkID()" class="mt-4 w-full px-6 py-4 bg-blue-600 hover:bg-blue-700 text-white 
+                                   font-semibold rounded-xl shadow-lg transition-all duration-300
+                                   hover:shadow-xl active:transform active:scale-95">
+                        <i class="fas fa-check-circle mr-2"></i>
+                        Xác nhận ID
+                    </button>
+                </div>
+                <div id="notification" class="hidden mt-4 animate-fade-in"></div>
+                <div id="voterInfo" class="hidden mt-6 animate-fade-in"></div>
+            </div>
+
+            <!-- Voting Buttons with enhanced styling -->
+            <div id="votingButtons"
+                class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto hidden animate-fade-in">
+                <!-- Xem Điều Lệ -->
+                <div class="hover-card p-6 bg-white/95 rounded-xl shadow-lg cursor-pointer" onclick="showRegulations()">
+                    <div class="flex items-center space-x-4">
+                        <div class="p-4 bg-blue-50 rounded-full">
+                            <i class="fas fa-book text-blue-600 text-2xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-800">Xem Điều Lệ</h3>
+                            <p class="text-gray-600 mt-1">Tìm hiểu các quy định và điều lệ bầu cử</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hướng Dẫn Sử Dụng -->
+                <div class="hover-card p-6 bg-white/95 rounded-xl shadow-lg cursor-pointer" onclick="showGuide()">
+                    <div class="flex items-center space-x-4">
+                        <div class="p-4 bg-green-50 rounded-full">
+                            <i class="fas fa-question-circle text-green-600 text-2xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-800">Hướng Dẫn Sử Dụng</h3>
+                            <p class="text-gray-600 mt-1">Xem hướng dẫn chi tiết cách sử dụng</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bầu Cử Ban Chấp Hành -->
+                <div class="hover-card p-6 bg-white/95 rounded-xl shadow-lg cursor-pointer" onclick="redirectToBCH()">
+                    <div class="flex items-center space-x-4">
+                        <div class="p-4 bg-purple-50 rounded-full">
+                            <i class="fas fa-users text-purple-600 text-2xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-800">Bầu Cử Ban Chấp Hành</h3>
+                            <p class="text-gray-600 mt-1">Tiến hành bầu cử ban chấp hành</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bầu Cử Ban Kiểm Tra -->
+                <div class="hover-card p-6 bg-white/95 rounded-xl shadow-lg cursor-pointer" onclick="redirectToBKT()">
+                    <div class="flex items-center space-x-4">
+                        <div class="p-4 bg-red-50 rounded-full">
+                            <i class="fas fa-clipboard-check text-red-600 text-2xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-800">Bầu Cử Ban Kiểm Tra</h3>
+                            <p class="text-gray-600 mt-1">Tiến hành bầu cử ban kiểm tra</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Enhanced Footer -->
+        <footer class="text-center mt-8 text-white/80 text-sm">
+            <p>© 2024 Hệ Thống Bầu Cử Trực Tuyến. Bảo lưu mọi quyền.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Giữ nguyên các hàm JavaScript từ code gốc
+        const appId = 'd457dee0-9328-402a-af94-cd3358dbad1c';
+        const accessKey = 'V2-MHoFx-64XnM-FJO7E-521rK-jB06n-cU7bN-oq6bW-KNMRV';
+        const region = 'www';
+        const usersTableName = 'CuTri';
+
+        async function apiRequest(tableName, action, data) {
+            const apiUrl = `https://${region}.appsheet.com/api/v2/apps/${appId}/tables/${tableName}/Action`;
+            try {
+                const response = await $.ajax({
+                    url: apiUrl,
+                    method: 'POST',
+                    headers: {
+                        'ApplicationAccessKey': accessKey,
+                        'Content-Type': 'application/json'
+                    },
+                    data: JSON.stringify({
+                        Action: action,
+                        Properties: {
+                            Locale: 'vi-VN',
+                            Timezone: 'Asia/Ho_Chi_Minh'
+                        },
+                        ...data
+                    })
+                });
+                return response;
+            } catch (error) {
+                console.error('API Error:', error);
+                throw error;
+            }
+        }
+
+        function displayVoterInfo(voterData) {
+            const infoDiv = document.getElementById('voterInfo');
+            infoDiv.innerHTML = `
+                <div class="p-6 bg-white/95 rounded-xl shadow-lg animate-fade-in">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Thông tin cử tri</h3>
+                    <div class="space-y-3">
+                        <p class="text-gray-700"><span class="font-medium">Đơn vị:</span> ${voterData["ĐƠN VỊ"]}</p>
+                    </div>
+                </div>
+            `;
+            infoDiv.classList.remove('hidden');
+        }
+
+        async function checkID() {
+            const idInput = document.getElementById("voterId").value.trim();
+            if (!idInput) {
+                showNotification("Vui lòng nhập ID cử tri.", "error");
+                return;
+            }
+
+            try {
+                const response = await apiRequest(usersTableName, 'Find', {
+                    Selector: {
+                        Filter: `[IDCT] = '${idInput}'`,
+                        Columns: ["IDCT", "ĐƠN VỊ"]
+                    }
+                });
+
+                const validVoter = response.find(voter => voter.IDCT === idInput);
+
+                if (validVoter) {
+                    // Lưu IDCT vào localStorage khi xác thực thành công
+                    localStorage.setItem('voterIDCT', idInput);
+                    showNotification("ID hợp lệ. Xin chào " + validVoter["ĐƠN VỊ"], "success");
+                    displayVoterInfo(validVoter);
+                    document.getElementById('votingButtons').classList.remove('hidden');
+                } else {
+                    localStorage.removeItem('voterIDCT'); // Xóa IDCT nếu không hợp lệ
+                    showNotification("ID không hợp lệ hoặc không tồn tại.", "error");
+                    document.getElementById('voterInfo').classList.add('hidden');
+                    document.getElementById('votingButtons').classList.add('hidden');
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                showNotification("Lỗi kết nối đến hệ thống. Vui lòng thử lại.", "error");
+            }
+        }
+
+        // Hàm chuyển hướng đến trang bầu cử ban chấp hành
+        function redirectToBCH() {
+            const idct = localStorage.getItem('voterIDCT');
+            if (idct) {
+                window.location.href = `https://rndwows.github.io/BauCu/banchaphanh.html?idct=${idct}`;
+            } else {
+                showNotification("Vui lòng nhập ID cử tri trước.", "error");
+            }
+        }
+
+        // Hàm chuyển hướng đến trang bầu cử ban kiểm tra
+        function redirectToBKT() {
+            const idct = localStorage.getItem('voterIDCT');
+            if (idct) {
+                // Thay đổi URL này theo trang bầu cử ban kiểm tra của bạn
+                window.location.href = `http://192.168.77.149:5500/baucu_BKT.html?idct=${idct}`;
+            } else {
+                showNotification("Vui lòng nhập ID cử tri trước.", "error");
+            }
+        }
+
+        // Kiểm tra xem có IDCT đã lưu không khi tải trang
+        window.onload = function () {
+            const savedIDCT = localStorage.getItem('voterIDCT');
+            if (savedIDCT) {
+                document.getElementById("voterId").value = savedIDCT;
+                checkID();
+            }
+        }
+
+        function showNotification(message, type) {
+            const notificationDiv = document.getElementById('notification');
+            notificationDiv.innerHTML = `
+                <div class="p-4 rounded-xl text-center ${type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                } animate-fade-in">
+                    <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'} mr-2"></i>
+                    ${message}
+                </div>
+            `;
+            notificationDiv.classList.remove('hidden');
+            setTimeout(() => {
+                notificationDiv.classList.add('hidden');
+            }, 3000);
+        }
+    </script>
+</body>
+
+</html>
