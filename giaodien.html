@@ -50,6 +50,17 @@
         .animate-fade-in {
             animation: fadeIn 0.5s ease-out;
         }
+
+        .disabled-card {
+            opacity: 0.6;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .completed-text {
+            color: #10B981;
+            font-weight: 600;
+        }
     </style>
 </head>
 
@@ -74,11 +85,13 @@
                     <input id="voterId" type="text" placeholder="Nhập ID cử tri của bạn..." class="w-full px-5 py-4 rounded-xl bg-white/90 text-gray-800 text-lg 
                                   focus:outline-none input-focus transition-all duration-300
                                   border border-transparent focus:border-blue-300">
-                    <button onclick="checkID()" class="mt-4 w-full px-6 py-4 bg-blue-600 hover:bg-blue-700 text-white 
-                                   font-semibold rounded-xl shadow-lg transition-all duration-300
-                                   hover:shadow-xl active:transform active:scale-95">
-                        <i class="fas fa-check-circle mr-2"></i>
-                        Xác nhận ID
+                    <button id="confirmButton" onclick="checkID()" class="mt-4 w-full px-6 py-4 bg-blue-600 hover:bg-blue-700 text-white 
+                                  font-semibold rounded-xl shadow-lg transition-all duration-300
+                                  hover:shadow-xl active:transform active:scale-95 flex justify-center items-center">
+                        <span class="button-text">Kiểm tra ID</span>
+                        <span id="spinner" class="hidden ml-2">
+                            <i class="fas fa-spinner fa-spin"></i>
+                        </span>
                     </button>
                 </div>
                 <div id="notification" class="hidden mt-4 animate-fade-in"></div>
@@ -115,27 +128,29 @@
                 </div>
 
                 <!-- Bầu Cử Ban Chấp Hành -->
-                <div class="hover-card p-6 bg-white/95 rounded-xl shadow-lg cursor-pointer" onclick="redirectToBCH()">
+                <div id="bchCard" class="hover-card p-6 bg-white/95 rounded-xl shadow-lg cursor-pointer"
+                    onclick="redirectToBCH()">
                     <div class="flex items-center space-x-4">
                         <div class="p-4 bg-purple-50 rounded-full">
                             <i class="fas fa-users text-purple-600 text-2xl"></i>
                         </div>
                         <div>
                             <h3 class="text-xl font-semibold text-gray-800">Bầu Cử Ban Chấp Hành</h3>
-                            <p class="text-gray-600 mt-1">Tiến hành bầu cử ban chấp hành</p>
+                            <p id="bchStatus" class="text-gray-600 mt-1">Tiến hành bầu cử ban chấp hành</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Bầu Cử Ban Kiểm Tra -->
-                <div class="hover-card p-6 bg-white/95 rounded-xl shadow-lg cursor-pointer" onclick="redirectToBKT()">
+                <div id="bktCard" class="hover-card p-6 bg-white/95 rounded-xl shadow-lg cursor-pointer"
+                    onclick="redirectToBKT()">
                     <div class="flex items-center space-x-4">
                         <div class="p-4 bg-red-50 rounded-full">
                             <i class="fas fa-clipboard-check text-red-600 text-2xl"></i>
                         </div>
                         <div>
                             <h3 class="text-xl font-semibold text-gray-800">Bầu Cử Ban Kiểm Tra</h3>
-                            <p class="text-gray-600 mt-1">Tiến hành bầu cử ban kiểm tra</p>
+                            <p id="bktStatus" class="text-gray-600 mt-1">Tiến hành bầu cử ban kiểm tra</p>
                         </div>
                     </div>
                 </div>
@@ -149,7 +164,6 @@
     </div>
 
     <script>
-        // Giữ nguyên các hàm JavaScript từ code gốc
         const appId = 'd457dee0-9328-402a-af94-cd3358dbad1c';
         const accessKey = 'V2-MHoFx-64XnM-FJO7E-521rK-jB06n-cU7bN-oq6bW-KNMRV';
         const region = 'www';
@@ -181,6 +195,18 @@
             }
         }
 
+        function updateVotingStatus(statusId, cardId, status) {
+            const statusElement = document.getElementById(statusId);
+            const cardElement = document.getElementById(cardId);
+
+            if (status === "Đã bầu cử") {
+                statusElement.textContent = "Đã bầu cử";
+                statusElement.classList.add('completed-text');
+                cardElement.classList.add('disabled-card');
+                cardElement.onclick = null; // Remove click handler
+            }
+        }
+
         function displayVoterInfo(voterData) {
             const infoDiv = document.getElementById('voterInfo');
             infoDiv.innerHTML = `
@@ -194,31 +220,82 @@
             infoDiv.classList.remove('hidden');
         }
 
+        async function checkVotingStatus(idct) {
+            try {
+                const response = await apiRequest(usersTableName, 'Find', {
+                    Selector: {
+                        Filter: `[IDCT] = '${idct}'`,
+                        Columns: ["IDCT", "ĐƠN VỊ", "Trạng Thái PB Ban Chấp Hành", "Trạng Thái PB Ban Kiểm Tra"]
+                    }
+                });
+
+                if (response && response.length > 0) {
+                    const voter = response[0];
+                    updateVotingStatus('bchStatus', 'bchCard', voter["Trạng Thái PB Ban Chấp Hành"]);
+                    updateVotingStatus('bktStatus', 'bktCard', voter["Trạng Thái PB Ban Kiểm Tra"]);
+                }
+            } catch (error) {
+                console.error("Error checking voting status:", error);
+                showNotification("Lỗi khi kiểm tra trạng thái bầu cử", "error");
+            }
+        }
+
+        function resetVotingStatus() {
+            // Đặt lại trạng thái của các phần tử bầu cử
+            document.getElementById('bchStatus').textContent = "Tiến hành bầu cử ban chấp hành";
+            document.getElementById('bktStatus').textContent = "Tiến hành bầu cử ban kiểm tra";
+
+            // Xóa các lớp CSS đã thêm trước đó
+            document.getElementById('bchStatus').classList.remove('completed-text');
+            document.getElementById('bktStatus').classList.remove('completed-text');
+            document.getElementById('bchCard').classList.remove('disabled-card');
+            document.getElementById('bktCard').classList.remove('disabled-card');
+
+            // Đặt lại sự kiện onclick
+            document.getElementById('bchCard').onclick = redirectToBCH;
+            document.getElementById('bktCard').onclick = redirectToBKT;
+        }
+
+
         async function checkID() {
             const idInput = document.getElementById("voterId").value.trim();
+            const confirmButton = document.getElementById("confirmButton");
+            const spinner = document.getElementById("spinner");
+            const buttonText = document.querySelector(".button-text");
+
             if (!idInput) {
                 showNotification("Vui lòng nhập ID cử tri.", "error");
                 return;
             }
 
+            // Đặt lại trạng thái bầu cử trước khi kiểm tra ID mới
+            resetVotingStatus();
+
+            confirmButton.disabled = true;
+            spinner.classList.remove("hidden");
+            buttonText.classList.add("hidden");
+
             try {
+                localStorage.removeItem('voterIDCT');
+
                 const response = await apiRequest(usersTableName, 'Find', {
                     Selector: {
                         Filter: `[IDCT] = '${idInput}'`,
-                        Columns: ["IDCT", "ĐƠN VỊ"]
+                        Columns: ["IDCT", "ĐƠN VỊ", "Trạng Thái PB Ban Chấp Hành", "Trạng Thái PB Ban Kiểm Tra"]
                     }
                 });
 
                 const validVoter = response.find(voter => voter.IDCT === idInput);
 
                 if (validVoter) {
-                    // Lưu IDCT vào localStorage khi xác thực thành công
                     localStorage.setItem('voterIDCT', idInput);
                     showNotification("ID hợp lệ. Xin chào " + validVoter["ĐƠN VỊ"], "success");
                     displayVoterInfo(validVoter);
                     document.getElementById('votingButtons').classList.remove('hidden');
+
+                    updateVotingStatus('bchStatus', 'bchCard', validVoter["Trạng Thái PB Ban Chấp Hành"]);
+                    updateVotingStatus('bktStatus', 'bktCard', validVoter["Trạng Thái PB Ban Kiểm Tra"]);
                 } else {
-                    localStorage.removeItem('voterIDCT'); // Xóa IDCT nếu không hợp lệ
                     showNotification("ID không hợp lệ hoặc không tồn tại.", "error");
                     document.getElementById('voterInfo').classList.add('hidden');
                     document.getElementById('votingButtons').classList.add('hidden');
@@ -227,51 +304,91 @@
                 console.error("Error:", error);
                 showNotification("Lỗi kết nối đến hệ thống. Vui lòng thử lại.", "error");
             }
+
+            confirmButton.disabled = false;
+            spinner.classList.add("hidden");
+            buttonText.classList.remove("hidden");
         }
 
-        // Hàm chuyển hướng đến trang bầu cử ban chấp hành
+
+
         function redirectToBCH() {
             const idct = localStorage.getItem('voterIDCT');
-            if (idct) {
-                window.location.href = `https://rndwows.github.io/BauCu/banchaphanh.html?idct=${idct}`;
-            } else {
+            const bchStatus = document.getElementById('bchStatus').textContent;
+
+            if (!idct) {
                 showNotification("Vui lòng nhập ID cử tri trước.", "error");
+                return;
             }
+
+            if (bchStatus === "Đã bầu cử") {
+                showNotification("Bạn đã hoàn thành bầu cử Ban Chấp Hành.", "error");
+                return;
+            }
+
+            window.location.href = `http://192.168.77.149:5500/baucu_ID.html?idct=${idct}`;
         }
 
-        // Hàm chuyển hướng đến trang bầu cử ban kiểm tra
         function redirectToBKT() {
             const idct = localStorage.getItem('voterIDCT');
-            if (idct) {
-                // Thay đổi URL này theo trang bầu cử ban kiểm tra của bạn
-                window.location.href = `http://192.168.77.149:5500/baucu_BKT.html?idct=${idct}`;
-            } else {
+            const bktStatus = document.getElementById('bktStatus').textContent;
+
+            if (!idct) {
                 showNotification("Vui lòng nhập ID cử tri trước.", "error");
+                return;
             }
+
+            if (bktStatus === "Đã bầu cử") {
+                showNotification("Bạn đã hoàn thành bầu cử Ban Kiểm Tra.", "error");
+                return;
+            }
+
+            window.location.href = `http://192.168.77.149:5500/baucu_BKT.html?idct=${idct}`;
         }
 
-        // Kiểm tra xem có IDCT đã lưu không khi tải trang
-        window.onload = function () {
-            const savedIDCT = localStorage.getItem('voterIDCT');
-            if (savedIDCT) {
-                document.getElementById("voterId").value = savedIDCT;
-                checkID();
-            }
+        function showGuide() {
+            // Hiện hướng dẫn sử dụng
+            showNotification("Chức năng đang được phát triển", "info");
+        }
+
+        function showRegulations() {
+            // Hiện điều lệ
+            showNotification("Chức năng đang được phát triển", "info");
         }
 
         function showNotification(message, type) {
             const notificationDiv = document.getElementById('notification');
+            const bgColor = type === 'success' ? 'bg-green-100' :
+                type === 'error' ? 'bg-red-100' :
+                    'bg-blue-100';
+            const textColor = type === 'success' ? 'text-green-700' :
+                type === 'error' ? 'text-red-700' :
+                    'text-blue-700';
+            const icon = type === 'success' ? 'fa-check-circle' :
+                type === 'error' ? 'fa-exclamation-circle' :
+                    'fa-info-circle';
+
             notificationDiv.innerHTML = `
-                <div class="p-4 rounded-xl text-center ${type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-                } animate-fade-in">
-                    <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'} mr-2"></i>
+                <div class="p-4 rounded-xl text-center ${bgColor} ${textColor} animate-fade-in">
+                    <i class="fas ${icon} mr-2"></i>
                     ${message}
                 </div>
             `;
             notificationDiv.classList.remove('hidden');
+
+            // Tự động ẩn thông báo sau 3 giây
             setTimeout(() => {
                 notificationDiv.classList.add('hidden');
             }, 3000);
+        }
+
+        // Kiểm tra xem có IDCT đã lưu không khi tải trang
+        window.onload = async function () {
+            const savedIDCT = localStorage.getItem('voterIDCT');
+            if (savedIDCT) {
+                document.getElementById("voterId").value = savedIDCT;
+                await checkID();
+            }
         }
     </script>
 </body>
