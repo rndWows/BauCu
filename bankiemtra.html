@@ -520,6 +520,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
 
     <script>
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
         function createCandidateCard(candidate) {
             return `
                 <div class="candidate-card">
@@ -611,25 +618,34 @@
             showLoading();
 
             try {
-                const [candidates, votes] = await Promise.all([
-                    apiRequest('UngCuVien', 'Find', {
-                        Properties: {
-                            Selector: 'Filter(UngCuVien, [Trạng thái]="Đã duyệt")'
-                        }
-                    }),
-                    apiRequest('PhieuBau_Bankiemtra', 'Find', {
-                        Properties: {
-                            Selector: 'Filter(PhieuBau_Bankiemtra, true)'
-                        }
-                    })
-                ]);
+                const voterId = getVoterIdFromUrl(); // Lấy ID cử tri từ URL hoặc một nguồn khác
+
+                // Lấy tất cả các bản ghi bỏ phiếu của cử tri hiện tại từ bảng PhieuBau
+                const votes = await apiRequest('PhieuBau', 'Find', {
+                    Properties: {
+                        Selector: `Filter(PhieuBau, [IDCT] = "${voterId}")`
+                    }
+                });
+
+                // Lấy danh sách IDUCV đã bầu
+                const votedIDs = votes.map(vote => vote.IDUCV);
+
+                // Lấy danh sách ứng cử viên
+                const candidates = await apiRequest('UngCuVien', 'Find', {
+                    Properties: {
+                        Selector: 'Filter(UngCuVien, [Trạng thái]="Đã duyệt")'
+                    }
+                });
 
                 if (!candidates || candidates.length === 0) {
                     FuiToast.error('Không có dữ liệu ứng cử viên');
                     return;
                 }
 
-                processCandidatesAndVotes(candidates, votes);
+                // Lọc bỏ các ứng viên đã được bầu
+                const filteredCandidates = candidates.filter(candidate => !votedIDs.includes(candidate.IDUCV));
+
+                processCandidatesAndVotes(filteredCandidates, votes);
 
             } catch (error) {
                 console.error('Lỗi khi tải dữ liệu:', error);
@@ -638,6 +654,7 @@
                 hideLoading();
             }
         }
+
 
 
         function processCandidatesAndVotes(candidates, votes) {
@@ -651,6 +668,7 @@
                 votes: voteCount[candidate.IDUCV] || 0
             }));
 
+            shuffleArray(allCandidates);
             currentFilteredCandidates = [...allCandidates];
             updateCandidatesDisplay();
         }
@@ -869,7 +887,6 @@
             }
         }
 
-
         function resetVotingState() {
             selectedCandidates = [];
             $('#voterIdInput').val('');
@@ -927,8 +944,6 @@
                 updateSelectedCount();
                 updateConfirmButton();
             });
-
-
 
             function showModal(modalId) {
                 // Hiển thị modal và ngăn cuộn ở màn hình chính
@@ -1054,7 +1069,6 @@
             });
         }
 
-
         // Utility Functions
         function debounce(func, wait) {
             let timeout;
@@ -1157,8 +1171,6 @@
 
             // Initialize tooltips and other UI enhancements
             setupAnimations();
-
-
 
             window.addEventListener('offline', function () {
                 FuiToast.error('Mất kết nối internet');
