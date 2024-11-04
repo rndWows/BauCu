@@ -536,20 +536,24 @@
                     <div class="candidate-info">
                         <h2 class="candidate-name">${candidate['Họ Và Tên']}</h2>
                         <div class="info-item">
-                            <i class="fas fa-id-card info-icon"></i>
-                            <span>ID UCV: ${candidate.IDUCV}</span>
+                            <i class="fas fa-building info-icon"></i>
+                            <span>${candidate['Tên doanh nghiệp']}</span>
                         </div>
                         <div class="info-item">
-                            <i class="fas fa-building info-icon"></i>
-                            <span>DN: ${candidate['Tên doanh nghiệp']}</span>
+                            <i class="fas fa-calendar-alt info-icon"></i>
+                            <span>Năm sinh: ${candidate['Ngày Sinh']}</span>
                         </div>
                         <div class="info-item">
                             <i class="fas fa-user-tie info-icon"></i>
-                            <span>Chức vụ DN: ${candidate['Chức vụ trong DN']}</span>
+                            <span>Chức vụ: ${candidate['Chức vụ trong DN']}</span>
                         </div>
                         <div class="info-item">
                             <i class="fas fa-briefcase info-icon"></i>
                             <span>Chức vụ BIFA: ${candidate['Chức vụ trong BIFA']}</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-store info-icon"></i>
+                            <span>Ngành nghề: ${candidate['Ngành nghề kinh doanh']}</span>
                         </div>
                     </div>
                     <div class="p-4 bg-gray-50 border-t border-gray-100">
@@ -766,7 +770,7 @@
                             ${candidate['Họ Và Tên']}
                         </h4>
                         <div class="flex flex-col text-xs text-gray-500">
-                            <span class="truncate">Đơn vị: ${candidate['Tên doanh nghiệp']}</span>
+                            <span class="truncate">${candidate['Tên doanh nghiệp']}</span>
                             <span class="truncate">Chức vụ: ${candidate['Chức vụ trong DN']}</span>
                         </div>
                     </div>
