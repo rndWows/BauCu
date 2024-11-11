@@ -84,7 +84,8 @@
                 <div class="relative">
                     <input id="voterId" type="text" placeholder="Nhập ID cử tri của bạn..." class="w-full px-5 py-4 rounded-xl bg-white/90 text-gray-800 text-lg 
                                   focus:outline-none input-focus transition-all duration-300
-                                  border border-transparent focus:border-blue-300">
+                                  border border-transparent focus:border-blue-300" 
+                                  oninput="this.value = this.value.toUpperCase()">
                     <button id="confirmButton" onclick="checkID()" class="mt-4 w-full px-6 py-4 bg-blue-600 hover:bg-blue-700 text-white 
                                   font-semibold rounded-xl shadow-lg transition-all duration-300
                                   hover:shadow-xl active:transform active:scale-95 flex justify-center items-center">
@@ -101,31 +102,6 @@
             <!-- Voting Buttons with enhanced styling -->
             <div id="votingButtons"
                 class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto hidden animate-fade-in">
-                <!-- Xem Điều Lệ -->
-                <div class="hover-card p-6 bg-white/95 rounded-xl shadow-lg cursor-pointer" onclick="showRegulations()">
-                    <div class="flex items-center space-x-4">
-                        <div class="p-4 bg-blue-50 rounded-full">
-                            <i class="fas fa-book text-blue-600 text-2xl"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-semibold text-gray-800">Xem Điều Lệ</h3>
-                            <p class="text-gray-600 mt-1">Tìm hiểu các quy định và điều lệ bầu cử</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Hướng Dẫn Sử Dụng -->
-                <div class="hover-card p-6 bg-white/95 rounded-xl shadow-lg cursor-pointer" onclick="showGuide()">
-                    <div class="flex items-center space-x-4">
-                        <div class="p-4 bg-green-50 rounded-full">
-                            <i class="fas fa-question-circle text-green-600 text-2xl"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-semibold text-gray-800">Hướng Dẫn Sử Dụng</h3>
-                            <p class="text-gray-600 mt-1">Xem hướng dẫn chi tiết cách sử dụng</p>
-                        </div>
-                    </div>
-                </div>
 
                 <!-- Bầu Cử Ban Chấp Hành -->
                 <div id="bchCard" class="hover-card p-6 bg-white/95 rounded-xl shadow-lg cursor-pointer"
@@ -154,13 +130,39 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Xem Điều Lệ -->
+                <div class="hover-card p-6 bg-white/95 rounded-xl shadow-lg cursor-pointer" onclick="showRegulations()">
+                    <div class="flex items-center space-x-4">
+                        <div class="p-4 bg-blue-50 rounded-full">
+                            <i class="fas fa-book text-blue-600 text-2xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-800">Xem Điều Lệ</h3>
+                            <p class="text-gray-600 mt-1">Tìm hiểu các quy định và điều lệ bầu cử</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hướng Dẫn Sử Dụng -->
+                <div class="hover-card p-6 bg-white/95 rounded-xl shadow-lg cursor-pointer" onclick="showGuide()">
+                    <div class="flex items-center space-x-4">
+                        <div class="p-4 bg-green-50 rounded-full">
+                            <i class="fas fa-question-circle text-green-600 text-2xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-800">Hướng Dẫn Sử Dụng</h3>
+                            <p class="text-gray-600 mt-1">Xem hướng dẫn chi tiết cách sử dụng</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
         <!-- Enhanced Footer -->
         <footer class="text-center mt-8 text-white/80 text-sm">
             <p>© 2024 Hệ Thống Bầu Cử Trực Tuyến. WOWS - Chuyển đổi số, sức bật cho Doanh nghiệp.</p>
-            <p>Hotline: 0908579753</p>
+            <p>Hotline: 0908579753</p>        
         </footer>
     </div>
 
