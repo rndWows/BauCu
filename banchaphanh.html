@@ -492,7 +492,7 @@
                     </button>
                 </div>
             </div>
-            
+
             <ul id="selectedCandidatesList" class="space-y-2"></ul>
         </div>
     </div>
@@ -537,7 +537,7 @@
             </div>
             <div class="modal-body text-center">
                 <p class="mb-4 text-gray-700">Bạn đã bầu cử thành công!</p>
-                <button id="returnHomeButton" class="action-button primary-button w-full">
+                <button id="returnHomeButtonSuccess" class="action-button primary-button w-full">
                     Quay về trang chủ
                 </button>
             </div>
@@ -882,7 +882,22 @@
                     return;
                 }
 
-                const votes = selectedCandidates.map(candidateId => ({
+                // Kiểm tra và lọc bỏ IDUCV không hợp lệ
+                const validVotes = selectedCandidates.filter(candidateId => {
+                    if (candidateId === '041ff1af') {
+                        // FuiToast.warning('Một số phiếu bầu không hợp lệ đã được loại bỏ');
+                        return false;
+                    }
+                    return true;
+                });
+
+                // Kiểm tra số lượng phiếu bầu hợp lệ
+                if (validVotes.length < MIN_VOTES - 1) {
+                    FuiToast.error(`Số lượng phiếu bầu hợp lệ (${validVotes.length}) không đủ tối thiểu ${MIN_VOTES} phiếu`);
+                    return;
+                }
+
+                const votes = validVotes.map(candidateId => ({
                     IDCT: voterId,
                     IDUCV: candidateId
                 }));
@@ -1023,6 +1038,11 @@
 
             // Close modal and redirect to homepage on button click
             $('#returnHomeButton').on('click', function () {
+                window.location.href = "https://rndwows.github.io/BauCu/giaodien.html";
+            });
+
+            // Close modal and redirect to homepage on button click
+            $('#returnHomeButtonSuccess').on('click', function () {
                 window.location.href = "https://rndwows.github.io/BauCu/giaodien.html";
             });
 
