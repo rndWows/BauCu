@@ -84,8 +84,8 @@
                 <div class="relative">
                     <input id="voterId" type="text" placeholder="Nhập ID cử tri của bạn..." class="w-full px-5 py-4 rounded-xl bg-white/90 text-gray-800 text-lg 
                                   focus:outline-none input-focus transition-all duration-300
-                                  border border-transparent focus:border-blue-300" 
-                                  oninput="this.value = this.value.toUpperCase()">
+                                  border border-transparent focus:border-blue-300"
+                        oninput="this.value = this.value.toUpperCase()">
                     <button id="confirmButton" onclick="checkID()" class="mt-4 w-full px-6 py-4 bg-blue-600 hover:bg-blue-700 text-white 
                                   font-semibold rounded-xl shadow-lg transition-all duration-300
                                   hover:shadow-xl active:transform active:scale-95 flex justify-center items-center">
@@ -162,7 +162,7 @@
         <!-- Enhanced Footer -->
         <footer class="text-center mt-8 text-white/80 text-sm">
             <p>© 2024 Hệ Thống Bầu Cử Trực Tuyến. WOWS - Chuyển đổi số, sức bật cho Doanh nghiệp.</p>
-            <p>Hotline: 0908579753</p>        
+            <p>Hotline: 0908579753</p>
         </footer>
     </div>
 
@@ -291,6 +291,11 @@
                 const validVoter = response.find(voter => voter.IDCT === idInput);
 
                 if (validVoter) {
+                    // Thêm ID vào URL mà không reload trang
+                    const newUrl = new URL(window.location.href);
+                    newUrl.searchParams.set('idct', idInput);
+                    window.history.pushState({}, '', newUrl);
+
                     localStorage.setItem('voterIDCT', idInput);
                     showNotification("ID hợp lệ. Xin chào " + validVoter["ĐƠN VỊ"], "success");
                     displayVoterInfo(validVoter);
@@ -299,6 +304,11 @@
                     updateVotingStatus('bchStatus', 'bchCard', validVoter["Trạng Thái PB Ban Chấp Hành"]);
                     updateVotingStatus('bktStatus', 'bktCard', validVoter["Trạng Thái PB Ban Kiểm Tra"]);
                 } else {
+                    // Xóa ID khỏi URL nếu không hợp lệ
+                    const newUrl = new URL(window.location.href);
+                    newUrl.searchParams.delete('idct');
+                    window.history.pushState({}, '', newUrl);
+
                     showNotification("ID không hợp lệ hoặc không tồn tại.", "error");
                     document.getElementById('voterInfo').classList.add('hidden');
                     document.getElementById('votingButtons').classList.add('hidden');
@@ -312,7 +322,6 @@
             spinner.classList.add("hidden");
             buttonText.classList.remove("hidden");
         }
-
 
 
         function redirectToBCH() {
@@ -383,8 +392,23 @@
             }, 3000);
         }
 
-        // Kiểm tra xem có IDCT đã lưu không khi tải trang
+        // Hàm để lấy parameters từ URL
+        function getUrlParameter(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        // Sửa lại window.onload để kiểm tra cả URL parameter và localStorage
         window.onload = async function () {
+            // Kiểm tra ID từ URL trước
+            const urlIDCT = getUrlParameter('idct');
+            if (urlIDCT) {
+                document.getElementById("voterId").value = urlIDCT;
+                await checkID();
+                return;
+            }
+
+            // Nếu không có ID trong URL, kiểm tra localStorage như cũ
             const savedIDCT = localStorage.getItem('voterIDCT');
             if (savedIDCT) {
                 document.getElementById("voterId").value = savedIDCT;
