@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh sách cử tri</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 1rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 1rem;
+            color: #2c3e50;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, #3498db, #2ecc71);
+            border-radius: 3px;
+        }
+
+        .search-box {
+            margin-bottom: 1.5rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 0.6rem 1rem;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 1rem;
+            min-width: 600px;
+            /* Sets a minimum width for the table */
+        }
+
+        th,
+        td {
+            padding: 0.8rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background: #f8f9fa;
+            color: #2c3e50;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+        }
+
+        tbody tr {
+            transition: all 0.3s ease;
+        }
+
+        tbody tr:hover {
+            background-color: #f8f9fa;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .qr-button {
+            padding: 0.6rem 0.8rem;
+            background: linear-gradient(135deg, #3498db, #2ecc71);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        .qr-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(46, 204, 113, 0.2);
+        }
+
+        .qr-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .error-message {
+            background-color: #fee2e2;
+            border: 1px solid #ef4444;
+            color: #b91c1c;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 1.5rem;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 15px;
+            text-align: center;
+            position: relative;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .close-button {
+            position: absolute;
+            top: 0;
+            right: 0.5rem;
+            cursor: pointer;
+            font-size: 3.5rem;
+            color: #000;
+            transition: color 0.3s ease;
+        }
+
+        .close-button:hover {
+            color: #e74c3c;
+        }
+
+        #qrcode {
+            margin-top: 1rem;
+            padding: 1rem;
+            background-color: white;
+            border-radius: 8px;
+            display: inline-block;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        @media (max-width: 768px) {
+
+            th,
+            td {
+                font-size: 0.75rem;
+                padding: 0.6rem;
+            }
+
+            .qr-button {
+                padding: 0.4rem 0.6rem;
+                font-size: 0.7rem;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .modal-content {
+                padding: 1rem;
+                margin: 10% auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Danh sách cử tri</h1>
+        </header>
+
+        <div id="errorMessage" class="error-message"></div>
+
+        <div class="search-box">
+            <input type="text" class="search-input" placeholder="Tìm kiếm theo IDCT, đơn vị hoặc địa chỉ..."
+                onkeyup="searchTable()">
+        </div>
+
+        <div id="loading" class="loading">
+            <i class="fas fa-spinner fa-spin"></i> Đang tải dữ liệu...
+        </div>
+
+        <div class="table-wrapper">
+            <table id="voterTable">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>IDCT</th>
+                        <th>Đơn vị</th>
+                        <th>Địa chỉ</th>
+                        <th>Trạng thái</th>
+                    </tr>
+                </thead>
+                <tbody id="voterTableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="qrModal" class="qr-modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal()">&times;</span>
+            <h2>Mã QR: <span id="currentIDCT"></span></h2>
+            <h2><span id="currentDonVi"></span></h2>
+
+            <div id="qrcode"></div>
+        </div>
+    </div>
+
+    <script>
+        // Cấu hình API AppSheet
+        const appId = 'd457dee0-9328-402a-af94-cd3358dbad1c';
+        const accessKey = 'V2-MHoFx-64XnM-FJO7E-521rK-jB06n-cU7bN-oq6bW-KNMRV';
+        const region = 'www';
+        const usersTableName = 'CuTri';
+
+        // Hàm gọi API AppSheet sử dụng fetch
+        async function apiRequest(tableName) {
+            const apiUrl = `https://${region}.appsheet.com/api/v2/apps/${appId}/tables/${tableName}/Action`;
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'ApplicationAccessKey': accessKey,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        Action: "Find",  // Thêm action mặc định là "Find"
+                        Properties: {
+                            Locale: 'vi-VN',
+                            Timezone: 'Asia/Ho_Chi_Minh'
+                        },
+                        Selector: {
+                            // Có thể thêm các điều kiện tìm kiếm ở đây nếu cần
+                        }
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                return result;
+            } catch (error) {
+                console.error('API Error:', error);
+                throw error;
+            }
+        }
+
+        // Lấy dữ liệu từ AppSheet
+        async function fetchVoterData() {
+            try {
+                document.getElementById('loading').style.display = 'block';
+                document.getElementById('errorMessage').style.display = 'none';
+
+                const response = await apiRequest(usersTableName);
+
+                // Kiểm tra nếu response là một mảng
+                if (Array.isArray(response)) {
+                    return response; // Trả về trực tiếp mảng dữ liệu
+                } else if (response && response.Rows) {
+                    return response.Rows;
+                } else {
+                    throw new Error('Dữ liệu không đúng định dạng');
+                }
+            } catch (error) {
+                showError('Đã xảy ra lỗi khi tải dữ liệu: ' + error.message);
+                return [];
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+            }
+        }
+
+        // Hiển thị dữ liệu trong bảng
+        function displayVoterData(voters) {
+            const tableBody = document.getElementById('voterTableBody');
+            tableBody.innerHTML = '';
+
+            if (!Array.isArray(voters) || voters.length === 0) {
+                showError('Không có dữ liệu cử tri nào được tìm thấy');
+                return;
+            }
+
+            voters.forEach(voter => {
+                const row = document.createElement('tr');
+
+                // Kiểm tra cấu trúc dữ liệu và lấy giá trị phù hợp
+                const voterData = voter.Values || voter;
+
+                row.innerHTML = `
+                <td>
+                    <button class="qr-button" onclick="showQR('${voterData.IDCT || ''}', '${voterData['ĐƠN VỊ'] || ''}')">
+
+                        <i class="fas fa-qrcode"></i>QR
+                    </button>
+                </td>
+                <td>${voterData.IDCT || ''}</td>
+                <td>${voterData['ĐƠN VỊ'] || ''}</td>
+                <td>${voterData['ĐỊA CHỈ'] || ''}</td>
+                <td><span class="status-badge status-active">${voterData['Tình trạng cử tri'] || ''}</span></td>
+            
+        `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Hiển thị thông báo lỗi
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+
+        // Tìm kiếm trong bảng
+        function searchTable() {
+            const input = document.querySelector('.search-input');
+            const filter = input.value.toLowerCase();
+            const rows = document.getElementById('voterTableBody').getElementsByTagName('tr');
+
+            for (let row of rows) {
+                const cells = row.getElementsByTagName('td');
+                let found = false;
+
+                for (let cell of cells) {
+                    const text = cell.textContent || cell.innerText;
+                    if (text.toLowerCase().indexOf(filter) > -1) {
+                        found = true;
+                        break;
+                    }
+                }
+
+                row.style.display = found ? '' : 'none';
+            }
+        }
+
+        // Hiển thị QR Code
+        function showQR(idct, donVi) {
+            document.getElementById('qrModal').style.display = 'block';
+            document.getElementById('currentIDCT').textContent = idct;
+            document.getElementById('currentDonVi').textContent = donVi;
+            document.getElementById('qrcode').innerHTML = '';
+
+            // Tạo URL với IDCT
+            const url = `https://bifa.wows.vn/giaodien.html?idct=${idct}`;
+
+            new QRCode(document.getElementById('qrcode'), {
+                text: url,
+                width: 300,
+                height: 300
+            });
+        }
+
+        // Đóng modal QR
+        function closeModal() {
+            document.getElementById('qrModal').style.display = 'none';
+        }
+
+        // Đóng modal khi click bên ngoài
+        window.onclick = function (event) {
+            const modal = document.getElementById('qrModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // Khởi tạo dữ liệu khi trang tải xong
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const voters = await fetchVoterData();
+                console.log('Total voters:', voters.length); // Log số lượng bản ghi
+                displayVoterData(voters);
+            } catch (error) {
+                showError('Không thể tải dữ liệu cử tri: ' + error.message);
+            }
+        });
+    </script>
+</body>
+
+</html>
