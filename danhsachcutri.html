@@ -375,19 +375,21 @@
 
                 // Kiểm tra cấu trúc dữ liệu và lấy giá trị phù hợp
                 const voterData = voter.Values || voter;
+                const idct = voterData.IDCT || '';
+                const donVi = voterData['ĐƠN VỊ'] || '';
+                const diaChi = voterData['ĐỊA CHỈ'] || '';
+                const trangThai = voterData['Tình trạng cử tri'] || '';
 
                 row.innerHTML = `
-                <td>
-                    <button class="qr-button" onclick="showQR('${voterData.IDCT || ''}', '${voterData['ĐƠN VỊ'] || ''}')">
-
-                        <i class="fas fa-qrcode"></i>QR
-                    </button>
-                </td>
-                <td>${voterData.IDCT || ''}</td>
-                <td>${voterData['ĐƠN VỊ'] || ''}</td>
-                <td>${voterData['ĐỊA CHỈ'] || ''}</td>
-                <td><span class="status-badge status-active">${voterData['Tình trạng cử tri'] || ''}</span></td>
-            
+            <td>
+                <button class="qr-button" onclick="showQR('${idct}', '${encodeURIComponent(donVi)}')">
+                    <i class="fas fa-qrcode"></i>QR
+                </button>
+            </td>
+            <td>${idct}</td>
+            <td>${donVi}</td>
+            <td>${diaChi}</td>
+            <td><span class="status-badge status-active">${trangThai}</span></td>
         `;
                 tableBody.appendChild(row);
             });
@@ -423,7 +425,9 @@
         }
 
         // Hiển thị QR Code
-        function showQR(idct, donVi) {
+        function showQR(idct, encodedDonVi) {
+            const donVi = decodeURIComponent(encodedDonVi);
+
             document.getElementById('qrModal').style.display = 'block';
             document.getElementById('currentIDCT').textContent = idct;
             document.getElementById('currentDonVi').textContent = donVi;
