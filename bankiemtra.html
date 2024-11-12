@@ -536,7 +536,7 @@
             </div>
             <div class="modal-body text-center">
                 <p class="mb-4 text-gray-700">Bạn đã bầu cử thành công!</p>
-                <button id="returnHomeButton" class="action-button primary-button w-full">
+                <button id="returnHomeButtonSuccess" class="action-button primary-button w-full">
                     Quay về trang chủ
                 </button>
             </div>
@@ -649,34 +649,25 @@
             showLoading();
 
             try {
-                const voterId = getVoterIdFromUrl(); // Lấy ID cử tri từ URL hoặc một nguồn khác
-
-                // Lấy tất cả các bản ghi bỏ phiếu của cử tri hiện tại từ bảng PhieuBau
-                const votes = await apiRequest('PhieuBau', 'Find', {
-                    Properties: {
-                        Selector: `Filter(PhieuBau, [IDCT] = "${voterId}")`
-                    }
-                });
-
-                // Lấy danh sách IDUCV đã bầu
-                const votedIDs = votes.map(vote => vote.IDUCV);
-
-                // Lấy danh sách ứng cử viên
-                const candidates = await apiRequest('UngCuVien', 'Find', {
-                    Properties: {
-                        Selector: 'Filter(UngCuVien, [Trạng thái]="Đã duyệt")'
-                    }
-                });
+                const [candidates, votes] = await Promise.all([
+                    apiRequest('UngCuVien_Bankiemtra', 'Find', {
+                        Properties: {
+                            Selector: 'Filter(UngCuVien_Bankiemtra, [Trạng thái]="Đã duyệt")'
+                        }
+                    }),
+                    apiRequest('PhieuBau_Bankiemtra', 'Find', {
+                        Properties: {
+                            Selector: 'Filter(PhieuBau_Bankiemtra, true)'
+                        }
+                    })
+                ]);
 
                 if (!candidates || candidates.length === 0) {
                     FuiToast.error('Không có dữ liệu ứng cử viên');
                     return;
                 }
 
-                // Lọc bỏ các ứng viên đã được bầu
-                const filteredCandidates = candidates.filter(candidate => !votedIDs.includes(candidate.IDUCV));
-
-                processCandidatesAndVotes(filteredCandidates, votes);
+                processCandidatesAndVotes(candidates, votes);
 
             } catch (error) {
                 console.error('Lỗi khi tải dữ liệu:', error);
@@ -890,7 +881,22 @@
                     return;
                 }
 
-                const votes = selectedCandidates.map(candidateId => ({
+                // Kiểm tra và lọc bỏ IDUCV không hợp lệ
+                const validVotes = selectedCandidates.filter(candidateId => {
+                    if (candidateId === '89a011ca') {
+                        // FuiToast.warning('Một số phiếu bầu không hợp lệ đã được loại bỏ');
+                        return false;
+                    }
+                    return true;
+                });
+
+                // Kiểm tra số lượng phiếu bầu hợp lệ
+                if (validVotes.length < MIN_VOTES - 1) {
+                    FuiToast.error(`Số lượng phiếu bầu hợp lệ (${validVotes.length}) không đủ tối thiểu ${MIN_VOTES} phiếu`);
+                    return;
+                }
+
+                const votes = validVotes.map(candidateId => ({
                     IDCT: voterId,
                     IDUCV: candidateId
                 }));
@@ -1028,6 +1034,11 @@
 
             // Close modal and redirect to homepage on button click
             $('#returnHomeButton').on('click', function () {
+                window.location.href = "https://rndwows.github.io/BauCu/giaodien.html";
+            });
+
+            // Close modal and redirect to homepage on button click
+            $('#returnHomeButtonSuccess').on('click', function () {
                 window.location.href = "https://rndwows.github.io/BauCu/giaodien.html";
             });
 
