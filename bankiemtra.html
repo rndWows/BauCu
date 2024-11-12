@@ -442,13 +442,16 @@
 
     <!-- Floating Action Buttons -->
     <div class="floating-actions">
-        <button id="confirmVoteButton" class="floating-button">
+        <!-- <button id="confirmVoteButton" class="floating-button">
             <i class="fas fa-paper-plane"></i>
-        </button>
+        </button> -->
         <button id="selectedCountButton" class="floating-button">
             <span id="selectedCountText" class="text-sm font-medium">0</span>
         </button>
-        <button id="refreshButton" class="floating-button">
+        <!-- <button id="refreshButton" class="floating-button">
+            <i class="fas fa-sync-alt"></i>
+        </button> -->
+        <button id="returnHomeButton" class="floating-button">
             <i class="fas fa-sync-alt"></i>
         </button>
     </div>
@@ -480,6 +483,14 @@
             <div class="modal-header">
                 <h2 class="modal-title">Ứng cử viên đã chọn</h2>
                 <span class="close-button">&times;</span>
+
+                <div class=" p-1">
+                    <button id="confirmVoteButton"
+                        class="action-button primary-button w-full flex items-center justify-center">
+                        <i class="fas fa-paper-plane mr-2"></i>
+                        Xác nhận bầu cử
+                    </button>
+                </div>
             </div>
             <ul id="selectedCandidatesList" class="space-y-2"></ul>
         </div>
