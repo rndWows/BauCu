@@ -755,19 +755,19 @@
                 return;
             }
 
-            const now = new Date();
-            const currentHour = now.getHours();
-            const currentMinutes = now.getMinutes();
+            // const now = new Date();
+            // const currentHour = now.getHours();
+            // const currentMinutes = now.getMinutes();
 
-            // Kiểm tra thời gian từ 15:00 đến 15:00
-            if (currentHour === 14 && currentMinutes >= 30) {
-                // Cho phép bầu cử
-            } else if (currentHour === 17 && currentMinutes <= 20) {
-                // Cho phép bầu cử
-            } else {
-                FuiToast.error('Chỉ có thể bầu cử từ 14h30.');
-                return;
-            }
+            // // Kiểm tra thời gian từ 15:00 đến 15:00
+            // if (currentHour === 14 && currentMinutes >= 30) {
+            //     // Cho phép bầu cử
+            // } else if (currentHour === 17 && currentMinutes <= 20) {
+            //     // Cho phép bầu cử
+            // } else {
+            //     FuiToast.error('Chỉ có thể bầu cử từ 14h30.');
+            //     return;
+            // }
 
             showLoading();
             submitVote(voterId);
