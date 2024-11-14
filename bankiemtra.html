@@ -758,13 +758,13 @@
             const currentHour = now.getHours();
             const currentMinutes = now.getMinutes();
 
-            // Kiểm tra thời gian từ 14:45 đến 15:05
+            // Kiểm tra thời gian từ 14:30 đến 15:00
             if (currentHour === 14 && currentMinutes >= 30) {
                 // Cho phép bầu cử
             } else if (currentHour === 15 && currentMinutes <= 0) {
                 // Cho phép bầu cử
             } else {
-                FuiToast.error('Chỉ có thể bầu cử từ 14h45 đến 15h05.');
+                FuiToast.error('Chỉ có thể bầu cử từ 14h30 đến 15h00.');
                 return;
             }
 
