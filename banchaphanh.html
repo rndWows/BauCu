@@ -755,15 +755,19 @@
                 return;
             }
 
-            // const now = new Date();
-            // const currentHour = now.getHours();
-            // const currentMinutes = now.getMinutes();
+            const now = new Date();
+            const currentHour = now.getHours();
+            const currentMinutes = now.getMinutes();
 
-            // // Check if the current time is between 15:00 and 15:30
-            // if (currentHour !== 13 || currentMinutes < 0 || currentMinutes >= 300) {
-            //     FuiToast.error('Chỉ có thể bầu cử từ 15h đến 15h30.');
-            //     return;
-            // }
+            // Kiểm tra thời gian từ 14:30 đến 15:05
+            if (currentHour === 9 && currentMinutes >= 30) {
+                // Cho phép bầu cử
+            } else if (currentHour === 10 && currentMinutes <= 5) {
+                // Cho phép bầu cử
+            } else {
+                FuiToast.error('Chỉ có thể bầu cử từ 14h30 đến 15h05.');
+                return;
+            }
 
             showLoading();
             submitVote(voterId);
